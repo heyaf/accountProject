@@ -26,6 +26,11 @@
     self.view.backgroundColor = RGB(242, 242, 242);
     [self creatData];
 }
+- (void)viewWillAppear:(BOOL)animated{
+    self.navigationController.navigationBarHidden = YES;
+    self.tabBarController.tabBar.hidden = NO;
+    
+}
 - (void)creatData{
     AlarmModel *alertmodel = [[AlarmModel alloc] init];
     alertmodel.name = @"5#车间电表";
