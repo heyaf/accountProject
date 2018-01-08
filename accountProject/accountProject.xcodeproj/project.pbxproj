@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1830A80220030E0F005C30C1 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1830A80120030E0F005C30C1 /* LoginViewController.m */; };
 		187ECE151FF6167900C449B4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 187ECE131FF6167900C449B4 /* Main.storyboard */; };
 		187ECE171FF6167900C449B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 187ECE161FF6167900C449B4 /* Assets.xcassets */; };
 		187ECE1A1FF6167900C449B4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 187ECE181FF6167900C449B4 /* LaunchScreen.storyboard */; };
@@ -105,6 +106,8 @@
 /* Begin PBXFileReference section */
 		12975856C88ED0B23FB5E7C0 /* Pods-accountProjectTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-accountProjectTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-accountProjectTests/Pods-accountProjectTests.release.xcconfig"; sourceTree = "<group>"; };
 		12D6B7D679B30BDD87A9F228 /* Pods-accountProjectTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-accountProjectTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-accountProjectTests/Pods-accountProjectTests.debug.xcconfig"; sourceTree = "<group>"; };
+		1830A80020030E0F005C30C1 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		1830A80120030E0F005C30C1 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		187ECE0A1FF6167900C449B4 /* accountProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = accountProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		187ECE141FF6167900C449B4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		187ECE161FF6167900C449B4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -294,6 +297,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		1830A7FF20030DDC005C30C1 /* 登陆 */ = {
+			isa = PBXGroup;
+			children = (
+				1830A80020030E0F005C30C1 /* LoginViewController.h */,
+				1830A80120030E0F005C30C1 /* LoginViewController.m */,
+			);
+			path = "登陆";
+			sourceTree = "<group>";
+		};
 		187ECE011FF6167900C449B4 = {
 			isa = PBXGroup;
 			children = (
@@ -357,6 +369,7 @@
 				187ECEAF1FF642E400C449B4 /* 功能 */,
 				187ECEB71FF642E500C449B4 /* 报警信息 */,
 				187ECEB31FF642E500C449B4 /* 我的 */,
+				1830A7FF20030DDC005C30C1 /* 登陆 */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -1070,6 +1083,7 @@
 				18D5F5BA1FFE33F700657911 /* LXDatePickerViewController.m in Sources */,
 				18D5F5981FFCD06100657911 /* JHScatterChart.m in Sources */,
 				18D5F59C1FFCD06100657911 /* JHWaveChart.m in Sources */,
+				1830A80220030E0F005C30C1 /* LoginViewController.m in Sources */,
 				187ECE7A1FF6276400C449B4 /* CoreHeaderView.m in Sources */,
 				187ECE851FF63E1F00C449B4 /* AppDelegate+Serve.m in Sources */,
 				187ECE741FF6276400C449B4 /* IBConfigration.m in Sources */,

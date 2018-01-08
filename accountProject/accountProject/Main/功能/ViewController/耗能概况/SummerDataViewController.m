@@ -24,7 +24,10 @@
 }
 - (void)viewWillAppear:(BOOL)animated{
     self.navigationController.navigationBarHidden = NO;
-    self.hidesBottomBarWhenPushed = NO;
+    self.tabBarController.tabBar.hidden = YES;
+}
+-(void)viewWillDisappear:(BOOL)animated{
+    self.tabBarController.tabBar.hidden = NO;
 }
 - (void)creatUI{
     [self creatHeader];

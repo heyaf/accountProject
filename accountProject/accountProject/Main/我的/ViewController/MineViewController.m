@@ -72,7 +72,6 @@
     self.navigationController.navigationBar.tintColor = KWhiteColor;
     [self creatData];
     [self creatUI];
-    self.hidesBottomBarWhenPushed = YES;
     
 }
 -(void)viewWillAppear:(BOOL)animated{
@@ -84,15 +83,13 @@
 //    [self refreshUI];
 }
 -(void)viewDidAppear:(BOOL)animated{
-    self.tabBarController.tabBar.hidden = NO;
 }
 -(void)viewWillDisappear:(BOOL)animated{
-    self.tabBarController.tabBar.hidden = YES;
+    
 
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navigationitem"] forBarMetrics:UIBarMetricsDefault]; //去掉 bar 下面有一条黑色的线
     [self.navigationController.navigationBar setShadowImage:[UIImage imageNamed:@""]];
     
-    self.hidesBottomBarWhenPushed = YES;
 }
 -(void)creatData{
     _dataArr = [NSMutableArray array];

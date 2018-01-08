@@ -12,6 +12,7 @@
 #import "WaterEnergyViewController.h"
 #import "GroupDataViewController.h"
 #import "SummerDataViewController.h"
+#import "LoginViewController.h"
 
 @interface HomeViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -36,6 +37,9 @@
     _footArray = [NSMutableArray arrayWithCapacity:0];
     [self creatData];
 
+    [self presentViewController:[[LoginViewController alloc] init] animated:YES completion:^{
+        
+    }];
 }
 - (void)viewWillAppear:(BOOL)animated{
     self.navigationController.navigationBarHidden = YES;
@@ -43,7 +47,6 @@
 
 }
 - (void)viewWillDisappear:(BOOL)animated{
-    self.tabBarController.tabBar.hidden = YES;
 }
 - (void)creatData{
     HomeHeaderModel *headerModel = [[HomeHeaderModel alloc] init];

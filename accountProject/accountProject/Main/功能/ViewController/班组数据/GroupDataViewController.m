@@ -27,7 +27,11 @@
 }
 - (void)viewWillAppear:(BOOL)animated{
     self.navigationController.navigationBarHidden = NO;
-    self.hidesBottomBarWhenPushed = NO;
+    self.tabBarController.tabBar.hidden = YES;
+}
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    self.tabBarController.tabBar.hidden = NO;
 }
 - (void)creatUI{
     [self creatHeader];
@@ -51,7 +55,7 @@
         button.layer.borderWidth = 0.5;
         button.layer.masksToBounds = YES;
         button.layer.cornerRadius = 1;
-        [button setBackgroundColor:RGB(242, 242, 242)];
+        [button setBackgroundColor:KWhiteColor];
         if (i==0) {
             [button setBackgroundColor:KSelectColor];
             [button setTitleColor:KWhiteColor forState:UIControlStateNormal];
