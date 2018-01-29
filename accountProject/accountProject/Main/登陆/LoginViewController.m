@@ -22,8 +22,6 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:KWhiteColor];
     [self creatmianUI];
-    SingleUser *user = [SingleUser shareTools];
-    user.name = @"heheheh";
 }
 -(void)creatmianUI {
     
