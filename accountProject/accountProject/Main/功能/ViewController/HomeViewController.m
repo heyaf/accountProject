@@ -36,9 +36,10 @@
     _headerArray = [NSMutableArray arrayWithCapacity:0];
     _footArray = [NSMutableArray arrayWithCapacity:0];
     [self creatData];
+    [self FindNewVersion];
 
     [self presentViewController:[[LoginViewController alloc] init] animated:YES completion:^{
-        
+    
     }];
 }
 - (void)viewWillAppear:(BOOL)animated{
@@ -92,10 +93,42 @@
 
 
 
+    
 }
 - (void)creatUI{
    
     
+}
+#pragma mark ---检测是否有新版本更新---
+- (void)FindNewVersion{
+    
+    NSDictionary *dict = @{@"phoneType":@"2"};
+    [[HttpRequest sharedInstance] postWithURLString:NewVersionUrl parameters:dict success:^(id responseObject) {
+        NSDictionary *Dic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil];
+        NSLog(@"%@",Dic);
+//        if ([Dic[@"success"] isEqualToString:@"false"]) {
+//            NSLog(@"-------");
+//            IBConfigration *configration = [[IBConfigration alloc] init];
+//            configration.title = @"温馨提示";
+//            configration.message = @"提示信息有新版本";
+//            configration.cancelTitle = @"取消";
+//            configration.confirmTitle = @"去更新";
+//            configration.tintColor = KSelectColor;
+//            configration.messageAlignment = NSTextAlignmentLeft;
+//
+//            IBAlertView *alerView = [IBAlertView alertWithConfigration:configration block:^(NSUInteger index) {
+//                if (index == 2) {
+//                    ASLog(@"去更新");
+//                }
+//            }];
+//            [alerView show];
+//
+//
+//        }
+        
+    } failure:^(NSError *error) {
+        ASLog(@"请求失败%@",error.description);
+    }];
 }
 
 #pragma mark ---Getter---

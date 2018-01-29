@@ -1,1 +1,8 @@
 
+
+
+#define IPUrl @"http://116.255.182.243:8081/carbonAccounting/%@"
+
+#define NewVersionUrl [NSString stringWithFormat:IPUrl,@"api/appLogin.do?getAppVersion"]
+#define LogininUrl [NSString stringWithFormat:IPUrl,@"api/appLogin.do?appLogin"]
+

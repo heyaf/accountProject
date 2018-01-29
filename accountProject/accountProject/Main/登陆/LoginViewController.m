@@ -22,6 +22,8 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:KWhiteColor];
     [self creatmianUI];
+    SingleUser *user = [SingleUser shareTools];
+    user.name = @"heheheh";
 }
 -(void)creatmianUI {
     
@@ -32,6 +34,7 @@
     
     CGRect accountF = CGRectMake(30, 250, kScreenWidth-60, 40);
     ZXTextField *TELText = [[ZXTextField alloc]initWithFrame:accountF withIcon:@"ICON_login" withPlaceholderText:@"请输入手机号码"];
+    TELText.inputText.textColor = KBlackColor;
     TELText.inputText.tag=204;
     TELText.inputText.autocapitalizationType = UITextAutocapitalizationTypeNone;
     TELText.inputText.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -52,6 +55,7 @@
     
     ZXTextField *textfild = [[ZXTextField alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth-20, 40) withIcon:@"ICON_mima" withPlaceholderText:@"密码"];
     textfild.inputText.tag = 205;
+    textfild.inputText.textColor = KBlackColor;
     textfild.inputText.secureTextEntry = YES;
     textfild.inputText.autocorrectionType = UITextBorderStyleNone;
     textfild.inputText.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -102,9 +106,36 @@
 
 }
 - (void)makeSureBtn{
-    [self dismissViewControllerAnimated:YES completion:^{
+    
+    NSDictionary *dict = @{@"phoneType":@"2"};
+    if (self.TelText.inputText.text.length==0) {
+        [SVProgressHUD showInfoWithStatus:@"手机号不能为空"];
+        [SVProgressHUD setForegroundColor:KBlackColor];
+        [SVProgressHUD setBackgroundColor:KWhiteColor];
+        [SVProgressHUD dismissWithDelay:1.0];
+    }else if (self.PassText.inputText.text.length==0){
+        [SVProgressHUD showInfoWithStatus:@"密码不能为空"];
+        [SVProgressHUD setForegroundColor:KBlackColor];
+        [SVProgressHUD setBackgroundColor:KWhiteColor];
+        [SVProgressHUD dismissWithDelay:1.0];
+    }else{
+        [[HttpRequest sharedInstance] postWithURLString:LogininUrl parameters:dict success:^(id responseObject) {
+            NSDictionary *Dic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil];
+            if ([Dic[@"success"] isEqualToString:@"false"]) {
+                [SVProgressHUD showSuccessWithStatus:@"登录成功"];
+                [SVProgressHUD dismissWithDelay:1.0];
+
+                [self dismissViewControllerAnimated:YES completion:nil];
+            }
+            NSLog(@"登录接口：%@",Dic);
+            
+            
+        } failure:^(NSError *error) {
+            ASLog(@"请求失败%@",error.description);
+        }];
         
-    }];
+    }
+    
 }
 
 //点击

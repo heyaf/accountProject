@@ -22,6 +22,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+   
     self.view.backgroundColor =RGB(242, 242, 242);
     self.navigationItem.title = @"水耗能";
     self.navigationController.navigationBar.barTintColor = RGB(44, 50, 59);

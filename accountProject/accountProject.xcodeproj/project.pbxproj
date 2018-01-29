@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1830A80220030E0F005C30C1 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1830A80120030E0F005C30C1 /* LoginViewController.m */; };
+		183902DF201EC3CF00DB7E4B /* SingleUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 183902DE201EC3CF00DB7E4B /* SingleUser.m */; };
 		187ECE151FF6167900C449B4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 187ECE131FF6167900C449B4 /* Main.storyboard */; };
 		187ECE171FF6167900C449B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 187ECE161FF6167900C449B4 /* Assets.xcassets */; };
 		187ECE1A1FF6167900C449B4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 187ECE181FF6167900C449B4 /* LaunchScreen.storyboard */; };
@@ -108,6 +109,8 @@
 		12D6B7D679B30BDD87A9F228 /* Pods-accountProjectTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-accountProjectTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-accountProjectTests/Pods-accountProjectTests.debug.xcconfig"; sourceTree = "<group>"; };
 		1830A80020030E0F005C30C1 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		1830A80120030E0F005C30C1 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		183902DD201EC3CF00DB7E4B /* SingleUser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SingleUser.h; sourceTree = "<group>"; };
+		183902DE201EC3CF00DB7E4B /* SingleUser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SingleUser.m; sourceTree = "<group>"; };
 		187ECE0A1FF6167900C449B4 /* accountProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = accountProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		187ECE141FF6167900C449B4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		187ECE161FF6167900C449B4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -302,6 +305,8 @@
 			children = (
 				1830A80020030E0F005C30C1 /* LoginViewController.h */,
 				1830A80120030E0F005C30C1 /* LoginViewController.m */,
+				183902DD201EC3CF00DB7E4B /* SingleUser.h */,
+				183902DE201EC3CF00DB7E4B /* SingleUser.m */,
 			);
 			path = "登陆";
 			sourceTree = "<group>";
@@ -1057,6 +1062,7 @@
 				187ECECD1FFB2C0200C449B4 /* HomeHeaderModel.m in Sources */,
 				18D5F58E1FFCD06100657911 /* JHChart.m in Sources */,
 				18D5F5CB1FFF6B4300657911 /* GroupDataViewController.m in Sources */,
+				183902DF201EC3CF00DB7E4B /* SingleUser.m in Sources */,
 				18D5F5BC1FFE33F700657911 /* NSArray+Category.m in Sources */,
 				187ECECA1FFB273F00C449B4 /* HomeAccountModel.m in Sources */,
 				187ECE7F1FF6276400C449B4 /* UIScrollView+Extension.m in Sources */,
