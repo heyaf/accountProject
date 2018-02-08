@@ -9,8 +9,10 @@
 #import <JSONModel/JSONModel.h>
 
 @interface AlarmModel : JSONModel
-@property (nonatomic, strong) NSString <Optional>*name;
-@property (nonatomic, strong) NSString <Optional>*errorStr;
-@property (nonatomic, strong) NSString <Optional>*numStr;
-@property (nonatomic, strong) NSString <Optional>*date;
+@property (nonatomic, strong) NSString <Optional>*title;
+@property (nonatomic, strong) NSString <Optional>*content;
+@property (nonatomic, strong) NSString <Optional>*lookStatus;
+@property (nonatomic, strong) NSString <Optional>*sendTime;
+@property (nonatomic, strong) NSString <Optional>*smsId;
+
 @end

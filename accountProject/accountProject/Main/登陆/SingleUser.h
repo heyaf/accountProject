@@ -8,18 +8,22 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SingleUser : NSObject<NSCopying,NSMutableCopying>
-@property (nonatomic,copy) NSString *userId;
-@property (nonatomic,copy) NSString *realName;
-@property (nonatomic,copy) NSString *orgCode;
-@property (nonatomic,copy) NSString *account;
-@property (nonatomic,copy) NSString *departid;
-@property (nonatomic,copy) NSString *email;
-@property (nonatomic,copy) NSString *mobilphone;
-@property (nonatomic,copy) NSString *signatureFile; //>头像图片路径
-@property (nonatomic,copy) NSString *msg;
-@property (nonatomic,assign) BOOL *success;
+@interface SingleUser :JSONModel <NSCopying,NSMutableCopying,NSCoding>
+@property (nonatomic,copy) NSString <Optional>*account;
+@property (nonatomic,copy) NSString <Optional>*departid;
+@property (nonatomic,copy) NSString <Optional>*email;
+@property (nonatomic,copy) NSString <Optional>*mobilephone;
+@property (nonatomic,copy) NSString <Optional>*orgCode;
+@property (nonatomic,copy) NSString <Optional>*realName;
+@property (nonatomic,copy) NSString <Optional>*signature;
+@property (nonatomic,copy) NSString <Optional>*signatureFile; //>头像图片路径
+@property (nonatomic,copy) NSString <Optional>*msg;
+@property (nonatomic,copy) NSString <Optional>*userId;
+@property (nonatomic,copy) NSString <Optional>*orgType;
 
-//实例化一个类方法、返回一个单例对象
-+ (instancetype)shareTools;
+
+@property (nonatomic,assign) BOOL success;
+
+////实例化一个类方法、返回一个单例对象
+//+ (instancetype)shareTools;
 @end

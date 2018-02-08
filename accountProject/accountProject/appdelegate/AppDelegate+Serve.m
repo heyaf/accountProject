@@ -8,6 +8,7 @@
 
 #import "AppDelegate+Serve.h"
 #import "DWTabBarController.h"
+#import "SingleUser.h"
 
 @implementation AppDelegate (Serve)
 #pragma mark ————— 初始化window —————
@@ -20,5 +21,18 @@
     
     
 }
-
+-(SingleUser *)getusermodel{
+    
+    // 从本地（@"weather" 文件中）获取.
+    NSString *file = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"weather"];
+    // data.
+    NSData *data = [NSData dataWithContentsOfFile:file];
+    // 反归档.
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+    // 获取@"model" 所对应的数据
+    SingleUser *usermodel = [unarchiver decodeObjectForKey:kUserinfoKey];
+    // 反归档结束.
+    [unarchiver finishDecoding];
+    return usermodel;
+}
 @end

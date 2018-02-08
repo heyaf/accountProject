@@ -8,6 +8,7 @@
 
 #import "LoginViewController.h"
 #import "ZXTextField.h"
+#import "HomeViewController.h"
 
 @interface LoginViewController ()<UITextFieldDelegate>
 @property (nonatomic,strong) ZXTextField *TelText;
@@ -31,7 +32,7 @@
     imageview.image = IMAGE_NAMED(@"bgimage");
     
     CGRect accountF = CGRectMake(30, 250, kScreenWidth-60, 40);
-    ZXTextField *TELText = [[ZXTextField alloc]initWithFrame:accountF withIcon:@"ICON_login" withPlaceholderText:@"请输入手机号码"];
+    ZXTextField *TELText = [[ZXTextField alloc]initWithFrame:accountF withIcon:@"ICON_login" withPlaceholderText:@"请输入手机号码或用户名"];
     TELText.inputText.textColor = KBlackColor;
     TELText.inputText.tag=204;
     TELText.inputText.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -105,7 +106,7 @@
 }
 - (void)makeSureBtn{
     
-    NSDictionary *dict = @{@"phoneType":@"2"};
+   
     if (self.TelText.inputText.text.length==0) {
         [SVProgressHUD showInfoWithStatus:@"手机号不能为空"];
         [SVProgressHUD setForegroundColor:KBlackColor];
@@ -117,23 +118,62 @@
         [SVProgressHUD setBackgroundColor:KWhiteColor];
         [SVProgressHUD dismissWithDelay:1.0];
     }else{
+        NSDictionary *dict = @{@"account":self.TelText.inputText.text,
+                               @"password":self.PassText.inputText.text
+                                   };
+        
+
         [[HttpRequest sharedInstance] postWithURLString:LogininUrl parameters:dict success:^(id responseObject) {
             NSDictionary *Dic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil];
-            if ([Dic[@"success"] isEqualToString:@"false"]) {
-                [SVProgressHUD showSuccessWithStatus:@"登录成功"];
+            NSLog(@"---登录--%@",Dic);
+            if ([Dic[@"success"] boolValue]) {
+                [self setUserInfoWithDictionary:Dic];
+                [SVProgressHUD showSuccessWithStatus:Dic[@"msg"]];
                 [SVProgressHUD dismissWithDelay:1.0];
 
-                [self dismissViewControllerAnimated:YES completion:nil];
+                [self dismissViewControllerAnimated:YES completion:^{
+                    if (self.myRegistblock) {
+                        _myRegistblock();
+                    }
+                }];
             }
-            NSLog(@"登录接口：%@",Dic);
-            
-            
+
+
         } failure:^(NSError *error) {
             ASLog(@"请求失败%@",error.description);
         }];
+
         
     }
     
+}
+#pragma mark ----用户信息单例----
+- (void)setUserInfoWithDictionary:(NSDictionary *)dic{
+    SingleUser *user = [[SingleUser alloc] init];
+    user.account = dic[@"account"];
+    user.departid = dic[@"departid"];
+    user.email = dic[@"email"];
+    user.departid = dic[@"mobilephone"];
+    user.msg = dic[@"msg"];
+    user.orgCode = dic[@"orgCode"];
+    user.realName = dic[@"realName"];
+    user.signature = dic[@"signature"];
+    user.signatureFile = dic[@"signatureFile"];
+    user.userId = dic[@"userId"];
+//    user.orgType = dic[@"orgType"];
+    
+    
+    // 创建归档时所需的data 对象.
+    NSMutableData *data = [NSMutableData data];
+    // 归档类.
+    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+    // 开始归档（@"model" 是key值，也就是通过这个标识来找到写入的对象）.
+    [archiver encodeObject:user forKey:kUserinfoKey];
+    // 归档结束.
+    [archiver finishEncoding];
+    // 写入本地（@"weather" 是写入的文件名）.
+    NSString *file = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"weather"];
+    [data writeToFile:file atomically:YES];
 }
 
 //点击

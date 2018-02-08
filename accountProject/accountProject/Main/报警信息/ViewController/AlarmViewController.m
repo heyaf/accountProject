@@ -11,7 +11,8 @@
 #import "AlarmModel.h"
 @interface AlarmViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic,strong) UITableView *tableview;
-@property (nonatomic,strong) NSArray *dataArr;
+@property (nonatomic,strong) NSMutableArray *dataArr;
+@property (nonatomic,assign) NSInteger pageStr;
 @end
 
 @implementation AlarmViewController
@@ -22,49 +23,108 @@
     self.navigationController.navigationBar.barTintColor = RGB(44, 50, 59);
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
 
-    
+    _dataArr = [NSMutableArray arrayWithCapacity:0];
     self.view.backgroundColor = RGB(242, 242, 242);
-    [self creatData];
+    _pageStr = 0;
+    [self tableview];
+    [self creatDataLoadMore:NO];
 }
 - (void)viewWillAppear:(BOOL)animated{
     self.navigationController.navigationBarHidden = YES;
     self.tabBarController.tabBar.hidden = NO;
     
 }
-- (void)creatData{
-    AlarmModel *alertmodel = [[AlarmModel alloc] init];
-    alertmodel.name = @"5#车间电表";
-    alertmodel.errorStr = @"[17:53:01]电量消耗异常";
-    alertmodel.date = @"2018-01-02";
-    alertmodel.numStr = @"报警值为[506.3KW.h]";
+- (void)creatDataLoadMore:(BOOL) isLoadMore{
     
-    AlarmModel *alertmodel1 = [[AlarmModel alloc] init];
-    alertmodel1.name = @"5#车间电表";
-    alertmodel1.errorStr = @"[17:53:01]电量消耗异常";
-    alertmodel1.date = @"2018-01-02";
-    alertmodel1.numStr = @"报警值为[506.3KW.h]";
-    
-    AlarmModel *alertmodel2 = [[AlarmModel alloc] init];
-    alertmodel2.name = @"5#车间电表";
-    alertmodel2.errorStr = @"[17:53:01]电量消耗异常";
-    alertmodel2.date = @"2018-01-02";
-    alertmodel2.numStr = @"报警值为[506.3KW.h]";
-    _dataArr = [NSArray arrayWithObjects:alertmodel,alertmodel1,alertmodel2, nil];
+    NSDictionary *paraDic = @{@"userName":@"admin",
+                              @"selectDate":@"2016",
+                              @"index":[NSString stringWithFormat:@"%li",(long)_pageStr],
+                              @"pageSize":@"10"
+                              };
+    [[HttpRequest sharedInstance] postWithURLString:WarningListUrl parameters:paraDic success:^(id responseObject) {
+        
+        NSDictionary *Dic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil];
+        NSLog(@"-----%@",Dic);
+        if ([Dic[@"success"] boolValue]) {
+            NSArray *arr = [AlarmModel arrayOfModelsFromDictionaries:Dic[@"rows"] error:nil];;
+            if (!isLoadMore) {
+                [_dataArr removeAllObjects];
+                
+            }
+            
+            [_dataArr addObjectsFromArray:arr];
+            NSLog(@"-----%@",_dataArr);
+
+            if (!_tableview) {
+                [self tableview];
+            }else{
+                [self.tableview reloadData];
+            [self.tableview footerSetState:CoreFooterViewRefreshStateSuccessedResultDataShowing];
+            }
+            
+
+        }else{
+          [SVProgressHUD showErrorWithStatus:Dic[@"msg"]];
+        }
+        
+//        [self.tableview headerSetState:CoreHeaderViewRefreshStateSuccessedResultDataShowing];
+//        [self.tableview footerSetState:CoreFooterViewRefreshStateSuccessedResultDataShowing
+//         ];
+        
+    } failure:^(NSError *error) {
+        
+    }];
     [self tableview];
 }
 #pragma mark ---Getter---
 - (UITableView *)tableview{
     
     if (!_tableview) {
-        _tableview = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight-HYFTabBarAndBottomHeight)];
+        _tableview = [[UITableView alloc] initWithFrame:CGRectMake(0,0, kScreenWidth, kScreenHeight-HYFTabBarAndBottomHeight-10)];
         [self.tableview registerNib:[UINib nibWithNibName:@"AlertTableViewCell" bundle:nil] forCellReuseIdentifier:@"AlarmCell"];
         _tableview.delegate = self;
         _tableview.dataSource = self;
         _tableview.backgroundColor = RGB(245, 245, 245);
         _tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
+        [self refreshWidgetPrepare];
+
         [self.view addSubview:_tableview];
+       
+
     }
     return _tableview;
+}
+#pragma mark  刷新控件准备
+-(void)refreshWidgetPrepare{
+    
+//    [self.tableview headerSetState:CoreHeaderViewRefreshStateRefreshing];
+    //添加顶部刷新控件
+    [self.tableview addHeaderWithTarget:self action:@selector(headerRefresh)];
+    
+    
+    //添加底部刷新
+    [self.tableview addFooterWithTarget:self action:@selector(foorterRefresh)];
+}
+
+
+
+#pragma mark  顶部刷新
+-(void)headerRefresh{
+    NSLog(@"....顶部刷新");
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.tableview headerSetState:CoreHeaderViewRefreshStateSuccessedResultDataShowing];
+    });
+    _pageStr=0;
+    [self creatDataLoadMore:NO];
+  
+}
+
+
+#pragma mark  底部刷新
+-(void)foorterRefresh{
+    NSLog(@"底部刷新。。。");
+    _pageStr++;
+    [self creatDataLoadMore:YES];
 }
 #pragma mark ---UItableviewDelegate---
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -99,11 +159,11 @@
     cell.BGView.layer.borderColor = RGB(235, 235, 235).CGColor;
     
     AlarmModel *model = _dataArr[indexPath.section];
-    cell.nameLB.text = model.name;
-    cell.dateLB.text = model.date;
-    cell.titleLB.text = model.errorStr;
-    cell.numLB.text = model.numStr;
-    
+    cell.nameLB.text = model.title;
+    cell.dateLB.text = model.sendTime;
+    cell.titleLB.text = model.content;
+//    cell.numLB.text = model.numStr;
+    [cell.dateLB showBadge];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
     

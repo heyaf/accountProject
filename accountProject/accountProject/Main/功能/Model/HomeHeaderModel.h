@@ -9,7 +9,11 @@
 #import <JSONModel/JSONModel.h>
 
 @interface HomeHeaderModel : JSONModel
-@property (nonatomic, strong) NSString <Optional>*date;
-@property (nonatomic, strong) NSString <Optional>*Title;
-@property (nonatomic, strong) NSString <Optional>*number;
+@property (nonatomic, strong) NSString <Optional>*EnergyKind;
+@property (nonatomic, strong) NSString <Optional>*companyCode;
+@property (nonatomic, strong) NSString <Optional>*groupCode;
+@property (nonatomic, strong) NSString <Optional>*orgName;
+@property (nonatomic, strong) NSString <Optional>*useDate;
+@property (nonatomic, strong) NSString <Optional>*useLevel;
+
 @end

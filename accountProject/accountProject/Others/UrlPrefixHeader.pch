@@ -2,7 +2,28 @@
 
 
 #define IPUrl @"http://116.255.182.243:8081/carbonAccounting/%@"
-
+//新版本接口
 #define NewVersionUrl [NSString stringWithFormat:IPUrl,@"api/appLogin.do?getAppVersion"]
+//登录接口
 #define LogininUrl [NSString stringWithFormat:IPUrl,@"api/appLogin.do?appLogin"]
+//修改密码接口
+#define ResetPassWordUrl [NSString stringWithFormat:IPUrl,@"api/appLogin.do?appChangePassword"]
 
+
+//首页头部接口
+#define HomeHeaderUrl [NSString stringWithFormat:IPUrl,@"api/energyConsumption.do?getEnergyConsumptionData"]
+//水耗能
+#define WaterUrl [NSString stringWithFormat:IPUrl,@"api/waterUse.do?getWaterUse"]
+//电能耗
+#define ElectricUrl [NSString stringWithFormat:IPUrl,@"api/electricityUse.do?getElectricityUse"]
+//蒸汽能耗（待添加，暂时没有）
+#define SteamUrl [NSString stringWithFormat:IPUrl,@"api/energyConsumption.do?getEnergyConsumptionData"]
+//燃气能耗
+#define GasUrl [NSString stringWithFormat:IPUrl,@"api/fuelUse.do?getFuelUse"]
+//部门列表
+#define GroupListUrl [NSString stringWithFormat:IPUrl,@"api/assistant.do?getOrgList"]
+
+//报警信息
+#define WarningListUrl [NSString stringWithFormat:IPUrl,@"api/sms.do?getMessageListPage"]
+//用户反馈
+#define UserSuggestUrl [NSString stringWithFormat:IPUrl,@"api/assistant.do?userRebackAdd"]

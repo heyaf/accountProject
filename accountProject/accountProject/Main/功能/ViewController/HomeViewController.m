@@ -21,6 +21,7 @@
 
 @property (nonatomic,strong) NSMutableArray *footArray; ///>底部数组
 @property (nonatomic,strong) UITableView *tableview; ///>主tableview
+@property (nonatomic,strong) SingleUser *myUsermodel;
 
 @end
 
@@ -37,31 +38,63 @@
     _footArray = [NSMutableArray arrayWithCapacity:0];
     [self creatData];
     [self FindNewVersion];
-
-    [self presentViewController:[[LoginViewController alloc] init] animated:YES completion:^{
+ 
+    [self showLoginVC];
     
-    }];
 }
+
 - (void)viewWillAppear:(BOOL)animated{
     self.navigationController.navigationBarHidden = YES;
     self.tabBarController.tabBar.hidden = NO;
 
+    DWTabBarController *tabbarVC = (DWTabBarController *)[[UIApplication sharedApplication] keyWindow].rootViewController;
+    [tabbarVC.tabBar.items[1] showBadge];
+//    DWTabBarController *tabbarVC = (DWTabBarController *)self.view.window.rootViewController
+    
+    SingleUser *user = [kAppdelegate getusermodel];
+    if (_myUsermodel.account.length>0&&![_myUsermodel.account isEqualToString:user.account]) {
+        [self getHeaderHotData];
+    }
 }
 - (void)viewWillDisappear:(BOOL)animated{
+    _myUsermodel = [kAppdelegate getusermodel];
+}
+
+#pragma mark ---是否弹出登陆页---
+- (void)showLoginVC{
+    SingleUser *user = [kAppdelegate getusermodel];
+    if (user.userId.length==0) {
+        LoginViewController *loginVC = [[LoginViewController alloc] init];
+        [self presentViewController:loginVC animated:YES completion:^{
+            
+        }];
+        loginVC.myRegistblock = ^{
+            [self refreshData];
+        };
+    }else{
+        [self getHeaderHotData];
+        
+    }
+    
+    
+}
+#pragma mark ---刷新数据---
+- (void)refreshData{
+    NSLog(@"刷新数据");
 }
 - (void)creatData{
-    HomeHeaderModel *headerModel = [[HomeHeaderModel alloc] init];
-    headerModel.date = @"2017年01月02日";
-    headerModel.Title = @"电耗能";
-    headerModel.number = @"100KW.h";
-    
-    
-    HomeHeaderModel *headerModel1 = [[HomeHeaderModel alloc] init];;
-    headerModel1.date = @"2017年01月02日";
-    headerModel1.Title = @"天然气耗能";
-    headerModel1.number = @"100m^3";
-    NSArray *arr = [NSArray arrayWithObjects:headerModel,headerModel1,nil];
-    [_headerArray addObjectsFromArray:arr];
+//    HomeHeaderModel *headerModel = [[HomeHeaderModel alloc] init];
+//    headerModel.date = @"2017年01月02日";
+//    headerModel.Title = @"电耗能";
+//    headerModel.number = @"100KW.h";
+//    
+//    
+//    HomeHeaderModel *headerModel1 = [[HomeHeaderModel alloc] init];;
+//    headerModel1.date = @"2017年01月02日";
+//    headerModel1.Title = @"天然气耗能";
+//    headerModel1.number = @"100m^3";
+//    NSArray *arr = [NSArray arrayWithObjects:headerModel,headerModel1,nil];
+//    [_headerArray addObjectsFromArray:arr];
     
     HomeAccountModel *homemodel = [[HomeAccountModel alloc] init];
     homemodel.imageName = @"icon_water";
@@ -89,7 +122,6 @@
     NSArray *Arr1 = [NSArray arrayWithObjects:homemodel,homemodel1,homemodel2,homemodel3,homemodel4,homemodel5, nil];
     [_footArray addObjectsFromArray:Arr1];
     [self tableview];
-    [self headerView];
 
 
 
@@ -105,32 +137,93 @@
     NSDictionary *dict = @{@"phoneType":@"2"};
     [[HttpRequest sharedInstance] postWithURLString:NewVersionUrl parameters:dict success:^(id responseObject) {
         NSDictionary *Dic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil];
-        NSLog(@"%@",Dic);
-//        if ([Dic[@"success"] isEqualToString:@"false"]) {
-//            NSLog(@"-------");
-//            IBConfigration *configration = [[IBConfigration alloc] init];
-//            configration.title = @"温馨提示";
-//            configration.message = @"提示信息有新版本";
-//            configration.cancelTitle = @"取消";
-//            configration.confirmTitle = @"去更新";
-//            configration.tintColor = KSelectColor;
-//            configration.messageAlignment = NSTextAlignmentLeft;
-//
-//            IBAlertView *alerView = [IBAlertView alertWithConfigration:configration block:^(NSUInteger index) {
-//                if (index == 2) {
-//                    ASLog(@"去更新");
-//                }
-//            }];
-//            [alerView show];
-//
-//
-//        }
+        
+
+        //此获取的版本号对应version，打印出来对应为1.2.3.4.5这样的字符串
+        NSString *app_build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+        if ([Dic[@"success"] boolValue]&&![app_build isEqualToString:Dic[@"data"][@"version"]]) {
+
+
+                IBConfigration *configration = [[IBConfigration alloc] init];
+                configration.title = @"温馨提示";
+                configration.message = @"提示信息有新版本";
+                configration.cancelTitle = @"取消";
+                configration.confirmTitle = @"去更新";
+                configration.tintColor = KSelectColor;
+                configration.messageAlignment = NSTextAlignmentLeft;
+                
+                IBAlertView *alerView = [IBAlertView alertWithConfigration:configration block:^(NSUInteger index) {
+                    if (index == 2) {
+                        ASLog(@"去更新");
+                    }
+                }];
+                [alerView show];
+
+            
+
+        }
         
     } failure:^(NSError *error) {
         ASLog(@"请求失败%@",error.description);
     }];
 }
+#pragma mark  刷新控件准备
+-(void)refreshWidgetPrepare{
+    
+    [self.tableview headerSetState:CoreHeaderViewRefreshStateRefreshing];
+    //添加顶部刷新控件
+    [self.tableview addHeaderWithTarget:self action:@selector(headerRefresh)];
+    
+    
+    //添加底部刷新
+    [self.tableview addFooterWithTarget:self action:@selector(foorterRefresh)];
+}
 
+
+
+#pragma mark  顶部刷新
+-(void)headerRefresh{
+    NSLog(@"....顶部刷新");
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.tableview headerSetState:CoreHeaderViewRefreshStateRefreshingFailed];
+    });
+    
+}
+
+
+#pragma mark  底部刷新
+-(void)foorterRefresh{
+    NSLog(@"底部刷新。。。");
+    
+}
+#pragma mark ---获取首页头部数据---
+- (void)getHeaderHotData{
+    
+    SingleUser *user = [kAppdelegate getusermodel];
+    NSLog(@"---%@",user);
+    NSDictionary *parmaryDic = @{@"orgCode":@"A03",
+                                 @"beginDate":@"2018-02-01",
+                                 @"endDate":@"",
+                                 @"groupLevel":@"3"
+                                 
+                                 };
+    NSLog(@"---%@",parmaryDic);
+
+    [SVProgressHUD show];
+    [SVProgressHUD setForegroundColor:KBlackColor];
+    [[HttpRequest sharedInstance] postWithURLString:HomeHeaderUrl parameters:parmaryDic success:^(id responseObject) {
+        NSDictionary *Dic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil];
+        NSLog(@"正确-----%@-----",Dic);
+        NSArray *DataArr = [HomeHeaderModel arrayOfModelsFromDictionaries:Dic[@"rows"] error:nil];
+        [_headerArray removeAllObjects];
+        [_headerArray addObjectsFromArray:DataArr];
+        [self setheaderView];
+        [self.tableview reloadData];
+        [SVProgressHUD dismiss];
+    } failure:^(NSError *error) {
+        NSLog(@"错误-----%@-----",error.description);
+    }];
+}
 #pragma mark ---Getter---
 - (UITableView *)tableview{
     
@@ -139,15 +232,16 @@
         _tableview.delegate = self;
         _tableview.dataSource = self;
         _tableview.backgroundColor = RGB(245, 245, 245);
+//        [self refreshWidgetPrepare];
         
         [self.view addSubview:_tableview];
     }
     return _tableview;
 }
-- (UIView *)headerView{
-    if (!_headerView) {
+- (UIView *)setheaderView{
+    
         CGFloat viewW = (kScreenWidth-20)/2;
-        CGFloat subViewH =viewW/9*10;
+        CGFloat subViewH =viewW/9*9;
         NSInteger Hnumber = _headerArray.count/2;
         NSInteger doubleF = _headerArray.count%2;
         if (doubleF==1) {
@@ -160,11 +254,11 @@
         [_headerView addSubview:imageView];
         for (int i=0; i<_headerArray.count; i++) {
             HomeHeaderModel *headermodel = _headerArray[i];
-            CGRect frame = CGRectMake(10+i%2*viewW, i/2*subViewH, viewW, subViewH);
+            CGRect frame = CGRectMake(10+i%2*viewW, i/2*subViewH+2*i, viewW, subViewH);
             UIView *view = [self creatHeaderSubViewWithFrame:frame AndModel:headermodel];
             [_headerView addSubview:view];
         }
-    }
+    
     return _headerView;
 }
 #pragma mark ---头部视图的子视图---
@@ -176,22 +270,32 @@
 //    view.layer.borderColor = RGB(235, 235, 235).CGColor;
 //    view.layer.masksToBounds = YES;
 //    view.layer.cornerRadius = 5.0f;
-    
-    UILabel *dateLB = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, frame.size.width, 20)];
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10, 5, frame.size.width-20, 1)];
+    lineView.backgroundColor = RGB(240, 240, 240);
+    [view addSubview:lineView];
+    UILabel *dateLB = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, frame.size.width, 20)];
     [view addSubview:dateLB];
-    dateLB.text = headermodel.date;
+    dateLB.text = headermodel.useDate;
     dateLB.textAlignment = NSTextAlignmentCenter;
     dateLB.font = [UIFont fontWithName:@"Helvetica-Bold" size:15.0f];
     
     UILabel *dateLB1 = [[UILabel alloc] initWithFrame:CGRectMake(0, 30, frame.size.width, frame.size.height-30-40)];
     [view addSubview:dateLB1];
-    dateLB1.text = headermodel.Title;
+    NSString *title;
+    if ([headermodel.EnergyKind isEqualToString:@"electric"]) {
+        title = @"电耗能";
+    }else if ([headermodel.EnergyKind isEqualToString:@"fuel"]){
+        title = @"天然气耗能";
+    }else if ([headermodel.EnergyKind isEqualToString:@"water"]){
+        title = @"水耗能";
+    }
+    dateLB1.text = title;
     dateLB1.textAlignment = NSTextAlignmentCenter;
     dateLB1.font = [UIFont fontWithName:@"Helvetica-Bold" size:20.0f];
     
-    UILabel *dateLB2 = [[UILabel alloc] initWithFrame:CGRectMake(0, frame.size.height-40, frame.size.width, 30)];
+    UILabel *dateLB2 = [[UILabel alloc] initWithFrame:CGRectMake(0, frame.size.height-50, frame.size.width, 30)];
     [view addSubview:dateLB2];
-    dateLB2.text = headermodel.number;
+    dateLB2.text = headermodel.useLevel;
     dateLB2.textColor = KSelectColor;
     dateLB2.textAlignment = NSTextAlignmentCenter;
     dateLB2.font = [UIFont fontWithName:@"Helvetica-Bold" size:20.0f];
@@ -207,7 +311,7 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     CGFloat viewW = (kScreenWidth-20)/2;
-    CGFloat subViewH =viewW/9*10;
+    CGFloat subViewH =viewW;
     NSInteger Hnumber = _headerArray.count/2;
     NSInteger doubleF = _headerArray.count%2;
     if (doubleF==1) {
@@ -231,11 +335,27 @@
     if (indexPath.row == 0) {
         WaterEnergyViewController *energyVC = [[WaterEnergyViewController alloc] init];
         energyVC.navigationItem.title = @"水耗能";
+        energyVC.url = WaterUrl;
+        [self.navigationController pushViewController:energyVC animated:YES];
+    }else if (indexPath.row ==1){
+        WaterEnergyViewController *energyVC = [[WaterEnergyViewController alloc] init];
+        energyVC.navigationItem.title = @"电耗能";
+        energyVC.url = ElectricUrl;
+        [self.navigationController pushViewController:energyVC animated:YES];
+        
+    }else if (indexPath.row ==2){
+        WaterEnergyViewController *energyVC = [[WaterEnergyViewController alloc] init];
+        energyVC.navigationItem.title = @"蒸汽耗能";
+        energyVC.url = SteamUrl;
+        [self.navigationController pushViewController:energyVC animated:YES];
+    }else if (indexPath.row ==3){
+        WaterEnergyViewController *energyVC = [[WaterEnergyViewController alloc] init];
+        energyVC.navigationItem.title = @"燃气耗能";
+        energyVC.url = GasUrl;
         [self.navigationController pushViewController:energyVC animated:YES];
     }else if (indexPath.row ==4){
         SummerDataViewController *sumVC = [[SummerDataViewController alloc] init];
         [self.navigationController pushViewController:sumVC animated:YES];
-        
     }else if (indexPath.row ==5){
         GroupDataViewController *groupVC = [[GroupDataViewController alloc] init];
         [self.navigationController pushViewController:groupVC animated:YES];

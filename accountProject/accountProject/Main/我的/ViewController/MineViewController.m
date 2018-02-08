@@ -45,6 +45,7 @@
 #import "SubnameViewController.h"
 #import "suggestViewController.h"
 #import "MBProgressHUD+MJ.h"
+#import "LoginViewController.h"
 //#import "OwnerViewController.h"
 //#import "LoginInViewController.h"
 #import "UIImageView+WebCache.h"
@@ -132,23 +133,14 @@
     _nameLB =label;
     
     UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn1.frame = CGRectMake(kScreenWidth/2-50, picImv.frame.origin.y+80, 45, 20);
-    [btn1 setTitle:@"登陆" forState:UIControlStateNormal];
-    [btn1 addTarget:self action:@selector(loginin) forControlEvents:UIControlEventTouchUpInside];
+    btn1.frame = CGRectMake(kScreenWidth/2-50, picImv.frame.origin.y+80, 100, 20);
+    SingleUser *user = [kAppdelegate getusermodel];
+    [btn1 setTitle:user.realName forState:UIControlStateNormal];
+    
     [headerView addSubview:btn1];
     _loginBTN = btn1;
     
-    UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn2.frame = CGRectMake(kScreenWidth/2+5, picImv.frame.origin.y+80, 45, 20);
-    [btn2 setTitle:@"注册" forState:UIControlStateNormal];
-    [btn2 addTarget:self action:@selector(loginin) forControlEvents:UIControlEventTouchUpInside];
-    [headerView addSubview:btn2];
     
-    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(kScreenWidth/2-1, picImv.frame.origin.y+83, 2, 15)];
-    lineView.backgroundColor = KWhiteColor;
-    [headerView addSubview:lineView];
-    _regietBtn = btn2;
-    _lineView = lineView;
     
     
     
@@ -187,23 +179,74 @@
     _quitBtn.layer.masksToBounds = YES;
     _quitBtn.layer.cornerRadius = 5.0f;
     [_quitBtn setTitle:@"退出登陆" forState:UIControlStateNormal];
+    [_quitBtn addTarget:self action:@selector(LoginOut) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_quitBtn];
     
     
 }
 
 #pragma mark    ------登陆注册------
--(void)loginin{
+- (void)loginin{
     
     
 }
+- (void)LoginOut{
+    // 创建归档时所需的data 对象.
+    NSMutableData *data = [NSMutableData data];
+    // 归档类.
+    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+    // 开始归档（@"model" 是key值，也就是通过这个标识来找到写入的对象）.
+    [archiver encodeObject:nil forKey:kUserinfoKey];
+    // 归档结束.
+    [archiver finishEncoding];
+    // 写入本地（@"weather" 是写入的文件名）.
+    NSString *file = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"weather"];
+    [data writeToFile:file atomically:YES];
 
+    LoginViewController *loginVC = [[LoginViewController alloc] init];
+    [self presentViewController:loginVC animated:YES completion:^{
+    
+        
+        
+    }];
+    loginVC.myRegistblock = ^{
+        SingleUser *user = [kAppdelegate getusermodel];
+        NSLog(@",,,%@",user.realName);
+        [_loginBTN setTitle:user.realName forState:UIControlStateNormal];
+    };
+}
+- (void)setUserInfoWithDictionary:(NSDictionary *)dic{
+    SingleUser *user = [[SingleUser alloc] init];
+    user.account = dic[@"account"];
+    user.departid = dic[@"departid"];
+    user.email = dic[@"email"];
+    user.departid = dic[@"mobilephone"];
+    user.msg = dic[@"msg"];
+    user.orgCode = dic[@"orgCode"];
+    user.realName = dic[@"realName"];
+    user.signature = dic[@"signature"];
+    user.signatureFile = dic[@"signatureFile"];
+    user.userId = dic[@"userId"];
+    
+    
+    // 创建归档时所需的data 对象.
+    NSMutableData *data = [NSMutableData data];
+    // 归档类.
+    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+    // 开始归档（@"model" 是key值，也就是通过这个标识来找到写入的对象）.
+    [archiver encodeObject:user forKey:kUserinfoKey];
+    // 归档结束.
+    [archiver finishEncoding];
+    // 写入本地（@"weather" 是写入的文件名）.
+    NSString *file = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"weather"];
+    [data writeToFile:file atomically:YES];
+}
 
 
 
 -(void)tapAction:(id)tap
 {
-    
+    ASLog(@"换头像");
     
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{

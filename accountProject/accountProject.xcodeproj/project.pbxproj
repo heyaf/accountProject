@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		1830A80220030E0F005C30C1 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1830A80120030E0F005C30C1 /* LoginViewController.m */; };
 		183902DF201EC3CF00DB7E4B /* SingleUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 183902DE201EC3CF00DB7E4B /* SingleUser.m */; };
+		183902E7202057D400DB7E4B /* UITabBar+DKSTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 183902E2202057D400DB7E4B /* UITabBar+DKSTabBar.m */; };
+		183902E8202057D400DB7E4B /* UITabBarItem+DKSBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = 183902E4202057D400DB7E4B /* UITabBarItem+DKSBadge.m */; };
+		183902E9202057D400DB7E4B /* UIView+DKSBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = 183902E6202057D400DB7E4B /* UIView+DKSBadge.m */; };
+		183902EC2021B82700DB7E4B /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 183902EB2021B82700DB7E4B /* NSString+MD5.m */; };
+		183902EF20231B1600DB7E4B /* DataString.m in Sources */ = {isa = PBXBuildFile; fileRef = 183902EE20231B1600DB7E4B /* DataString.m */; };
+		184D9D9D202983B100C9FEF9 /* NSDictionary+log.m in Sources */ = {isa = PBXBuildFile; fileRef = 184D9D9C202983B000C9FEF9 /* NSDictionary+log.m */; };
 		187ECE151FF6167900C449B4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 187ECE131FF6167900C449B4 /* Main.storyboard */; };
 		187ECE171FF6167900C449B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 187ECE161FF6167900C449B4 /* Assets.xcassets */; };
 		187ECE1A1FF6167900C449B4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 187ECE181FF6167900C449B4 /* LaunchScreen.storyboard */; };
@@ -111,6 +117,18 @@
 		1830A80120030E0F005C30C1 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		183902DD201EC3CF00DB7E4B /* SingleUser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SingleUser.h; sourceTree = "<group>"; };
 		183902DE201EC3CF00DB7E4B /* SingleUser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SingleUser.m; sourceTree = "<group>"; };
+		183902E1202057D400DB7E4B /* UITabBar+DKSTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITabBar+DKSTabBar.h"; sourceTree = "<group>"; };
+		183902E2202057D400DB7E4B /* UITabBar+DKSTabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITabBar+DKSTabBar.m"; sourceTree = "<group>"; };
+		183902E3202057D400DB7E4B /* UITabBarItem+DKSBadge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITabBarItem+DKSBadge.h"; sourceTree = "<group>"; };
+		183902E4202057D400DB7E4B /* UITabBarItem+DKSBadge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITabBarItem+DKSBadge.m"; sourceTree = "<group>"; };
+		183902E5202057D400DB7E4B /* UIView+DKSBadge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+DKSBadge.h"; sourceTree = "<group>"; };
+		183902E6202057D400DB7E4B /* UIView+DKSBadge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+DKSBadge.m"; sourceTree = "<group>"; };
+		183902EA2021B82700DB7E4B /* NSString+MD5.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5.h"; sourceTree = "<group>"; };
+		183902EB2021B82700DB7E4B /* NSString+MD5.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = "<group>"; };
+		183902ED20231B1600DB7E4B /* DataString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataString.h; sourceTree = "<group>"; };
+		183902EE20231B1600DB7E4B /* DataString.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DataString.m; sourceTree = "<group>"; };
+		184D9D9B202983B000C9FEF9 /* NSDictionary+log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+log.h"; sourceTree = "<group>"; };
+		184D9D9C202983B000C9FEF9 /* NSDictionary+log.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+log.m"; sourceTree = "<group>"; };
 		187ECE0A1FF6167900C449B4 /* accountProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = accountProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		187ECE141FF6167900C449B4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		187ECE161FF6167900C449B4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -311,6 +329,19 @@
 			path = "登陆";
 			sourceTree = "<group>";
 		};
+		183902E0202057D400DB7E4B /* DKSBadge */ = {
+			isa = PBXGroup;
+			children = (
+				183902E1202057D400DB7E4B /* UITabBar+DKSTabBar.h */,
+				183902E2202057D400DB7E4B /* UITabBar+DKSTabBar.m */,
+				183902E3202057D400DB7E4B /* UITabBarItem+DKSBadge.h */,
+				183902E4202057D400DB7E4B /* UITabBarItem+DKSBadge.m */,
+				183902E5202057D400DB7E4B /* UIView+DKSBadge.h */,
+				183902E6202057D400DB7E4B /* UIView+DKSBadge.m */,
+			);
+			path = DKSBadge;
+			sourceTree = "<group>";
+		};
 		187ECE011FF6167900C449B4 = {
 			isa = PBXGroup;
 			children = (
@@ -406,6 +437,12 @@
 		187ECE461FF61CCC00C449B4 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
+				183902EA2021B82700DB7E4B /* NSString+MD5.h */,
+				183902EB2021B82700DB7E4B /* NSString+MD5.m */,
+				183902ED20231B1600DB7E4B /* DataString.h */,
+				183902EE20231B1600DB7E4B /* DataString.m */,
+				184D9D9B202983B000C9FEF9 /* NSDictionary+log.h */,
+				184D9D9C202983B000C9FEF9 /* NSDictionary+log.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -413,6 +450,7 @@
 		187ECE471FF61CCC00C449B4 /* Tool */ = {
 			isa = PBXGroup;
 			children = (
+				183902E0202057D400DB7E4B /* DKSBadge */,
 				18D5F5C51FFF56E000657911 /* 滚轮选择器 */,
 				18D5F5AF1FFE33F700657911 /* CalentTool */,
 				18D5F56E1FFCD06000657911 /* JHChart */,
@@ -1049,11 +1087,14 @@
 				187ECEAD1FF6418900C449B4 /* DWTabBar.m in Sources */,
 				187ECE811FF6276400C449B4 /* UIView+Extension.m in Sources */,
 				187ECE821FF6276400C449B4 /* HttpRequest.m in Sources */,
+				183902E9202057D400DB7E4B /* UIView+DKSBadge.m in Sources */,
 				18D5F54D1FFBA30500657911 /* MBProgressHUD+MJ.m in Sources */,
+				183902EC2021B82700DB7E4B /* NSString+MD5.m in Sources */,
 				18D5F59A1FFCD06100657911 /* JHTableChart.m in Sources */,
 				187ECE781FF6276400C449B4 /* CoreHeaderShowView.m in Sources */,
 				18D5F5671FFCB37A00657911 /* ZXTextField.m in Sources */,
 				187ECE7C1FF6276400C449B4 /* CoreRefreshConst.m in Sources */,
+				184D9D9D202983B100C9FEF9 /* NSDictionary+log.m in Sources */,
 				187ECEBD1FF6433800C449B4 /* HomeViewController.m in Sources */,
 				18D5F5CE1FFF6BE300657911 /* SummerDataViewController.m in Sources */,
 				18D5F5931FFCD06100657911 /* JHPieChart.m in Sources */,
@@ -1065,11 +1106,13 @@
 				183902DF201EC3CF00DB7E4B /* SingleUser.m in Sources */,
 				18D5F5BC1FFE33F700657911 /* NSArray+Category.m in Sources */,
 				187ECECA1FFB273F00C449B4 /* HomeAccountModel.m in Sources */,
+				183902E8202057D400DB7E4B /* UITabBarItem+DKSBadge.m in Sources */,
 				187ECE7F1FF6276400C449B4 /* UIScrollView+Extension.m in Sources */,
 				187ECEAE1FF6418900C449B4 /* DWTabBarController.m in Sources */,
 				187ECEC31FF643AC00C449B4 /* MineViewController.m in Sources */,
 				18D5F53F1FFB934D00657911 /* AlertTableViewCell.m in Sources */,
 				187ECE731FF6276400C449B4 /* IBAlertView.m in Sources */,
+				183902E7202057D400DB7E4B /* UITabBar+DKSTabBar.m in Sources */,
 				187ECE721FF6276400C449B4 /* ZWMGuideView.m in Sources */,
 				18D5F5901FFCD06100657911 /* JHColumnItem.m in Sources */,
 				18D5F5551FFCA3D000657911 /* suggestViewController.m in Sources */,
@@ -1078,6 +1121,7 @@
 				187ECE1D1FF6167900C449B4 /* main.m in Sources */,
 				187ECE481FF61CCD00C449B4 /* ViewController.m in Sources */,
 				187ECE491FF61CCD00C449B4 /* AppDelegate.m in Sources */,
+				183902EF20231B1600DB7E4B /* DataString.m in Sources */,
 				18D5F5441FFBA15A00657911 /* MineTableViewCell.m in Sources */,
 				18D5F56D1FFCC37900657911 /* WaterEnergyViewController.m in Sources */,
 				18D5F5BD1FFE33F700657911 /* NSDate+Calendar.m in Sources */,

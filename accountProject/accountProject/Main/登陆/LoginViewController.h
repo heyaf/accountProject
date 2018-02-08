@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+typedef void(^RegistBlock)(void);
 
 @interface LoginViewController : UIViewController
+@property (nonatomic,copy) RegistBlock myRegistblock;
 
 @end
