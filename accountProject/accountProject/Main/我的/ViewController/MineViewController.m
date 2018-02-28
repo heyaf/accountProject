@@ -80,7 +80,8 @@
     [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault]; //去掉 bar 下面有一条黑色的线
     [self.navigationController.navigationBar setShadowImage:[UIImage new]];
     
-    
+    [kAppdelegate checkWarningMessages];
+
 //    [self refreshUI];
 }
 -(void)viewDidAppear:(BOOL)animated{
@@ -246,7 +247,7 @@
 
 -(void)tapAction:(id)tap
 {
-    ASLog(@"换头像");
+//    ASLog(@"换头像");
     
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{

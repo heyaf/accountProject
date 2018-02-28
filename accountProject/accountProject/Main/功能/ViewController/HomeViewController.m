@@ -29,6 +29,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    NSInteger i=4;
+    NSLog(@"----%ld",(long)(i+=6));
+    NSLog(@"---%ld",(long)(i+=12));
+    
     self.navigationController.navigationBar.barTintColor = RGB(44, 50, 59);
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
     self.navigationController.navigationBar.tintColor = KWhiteColor;
@@ -46,10 +50,7 @@
 - (void)viewWillAppear:(BOOL)animated{
     self.navigationController.navigationBarHidden = YES;
     self.tabBarController.tabBar.hidden = NO;
-
-    DWTabBarController *tabbarVC = (DWTabBarController *)[[UIApplication sharedApplication] keyWindow].rootViewController;
-    [tabbarVC.tabBar.items[1] showBadge];
-//    DWTabBarController *tabbarVC = (DWTabBarController *)self.view.window.rootViewController
+    [kAppdelegate checkWarningMessages];
     
     SingleUser *user = [kAppdelegate getusermodel];
     if (_myUsermodel.account.length>0&&![_myUsermodel.account isEqualToString:user.account]) {
@@ -154,7 +155,8 @@
                 
                 IBAlertView *alerView = [IBAlertView alertWithConfigration:configration block:^(NSUInteger index) {
                     if (index == 2) {
-                        ASLog(@"去更新");
+                        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-apps://itunes.apple.com/cn/app/jie-zou-da-shi/id493901993?mt=8"]];
+                        
                     }
                 }];
                 [alerView show];
@@ -201,10 +203,10 @@
     
     SingleUser *user = [kAppdelegate getusermodel];
     NSLog(@"---%@",user);
-    NSDictionary *parmaryDic = @{@"orgCode":@"A03",
-                                 @"beginDate":@"2018-02-01",
+    NSDictionary *parmaryDic = @{@"orgCode":user.orgCode,
+                                 @"beginDate":[DataString getYesterdayData],
                                  @"endDate":@"",
-                                 @"groupLevel":@"3"
+                                 @"groupLevel":@"0"
                                  
                                  };
     NSLog(@"---%@",parmaryDic);

@@ -13,7 +13,7 @@
 + (NSString *)getNowData{
     NSDate *currentDate = [NSDate date];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"YYYY-MM-dd hh:mm:ss"];
+    [dateFormatter setDateFormat:@"YYYY-MM-dd"];
     NSString *currentDateStr = [dateFormatter stringFromDate:currentDate];
     
     return currentDateStr;
@@ -47,7 +47,7 @@
 + (NSString *)getMonthBeforeData{
     NSDate * date = [NSDate date];
     NSDateFormatter * dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     //一周的秒数
     NSTimeInterval time = 30 * 24 * 60 * 60;
     //下周就把"-"去掉
@@ -58,7 +58,7 @@
 + (NSString *)getThreeMonthBeforeData{
     NSDate * date = [NSDate date];
     NSDateFormatter * dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     //一周的秒数
     NSTimeInterval time = 90 * 24 * 60 * 60;
     //下周就把"-"去掉

@@ -7,9 +7,11 @@
 //
 
 #import "AppDelegate.h"
+
 @class SingleUser;
 @interface AppDelegate (Serve)
 -(void)initWindow;
 
 -(SingleUser *)getusermodel;
+- (void)checkWarningMessages;
 @end

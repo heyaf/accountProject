@@ -32,11 +32,32 @@
 - (void)viewWillAppear:(BOOL)animated{
     self.navigationController.navigationBarHidden = YES;
     self.tabBarController.tabBar.hidden = NO;
+    DWTabBarController *tabbarVC = (DWTabBarController *)[[UIApplication sharedApplication] keyWindow].rootViewController;
+    [tabbarVC.tabBar.items[1] hidenBadge];
+}
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self sendMessageHasRead];
+}
+#pragma mark ---修改报警信息---
+- (void)sendMessageHasRead{
+    if (_dataArr.count>0) {
+        NSMutableArray *idArr = [NSMutableArray arrayWithCapacity:0];
+        for (AlarmModel *model in _dataArr) {
+            [idArr addObject:model.smsId];
+        }
+        NSDictionary *pareDic = @{@"smsids":idArr};
+        [[HttpRequest sharedInstance] postWithURLString:ChangeWarningMagUrl parameters:pareDic success:^(id responseObject) {
+            
+        } failure:^(NSError *error) {
+            
+        }];
+    }
     
 }
 - (void)creatDataLoadMore:(BOOL) isLoadMore{
-    
-    NSDictionary *paraDic = @{@"userName":@"admin",
+    SingleUser *usermodel = [kAppdelegate getusermodel];
+    NSDictionary *paraDic = @{@"account":usermodel.account,
                               @"selectDate":@"2016",
                               @"index":[NSString stringWithFormat:@"%li",(long)_pageStr],
                               @"pageSize":@"10"
@@ -110,7 +131,7 @@
 
 #pragma mark  顶部刷新
 -(void)headerRefresh{
-    NSLog(@"....顶部刷新");
+    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.tableview headerSetState:CoreHeaderViewRefreshStateSuccessedResultDataShowing];
     });
@@ -163,7 +184,10 @@
     cell.dateLB.text = model.sendTime;
     cell.titleLB.text = model.content;
 //    cell.numLB.text = model.numStr;
-    [cell.dateLB showBadge];
+    if ([model.lookStatus isEqualToString:@"0"]) {
+        [cell.dateLB showBadge];
+    }
+    
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
     

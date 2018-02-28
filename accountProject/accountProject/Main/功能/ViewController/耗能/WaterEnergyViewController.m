@@ -33,7 +33,7 @@
     _groupArr = [NSMutableArray arrayWithCapacity:0];
     _groupTitleArr = [NSMutableArray arrayWithCapacity:0];
     _beginData = [DataString getBeforeData:7];
-    _endData = [DataString getBeforeData:5];
+    _endData = [DataString getNowData];
     
     [self getGroupList];
 //    NSArray *array = @[
@@ -180,7 +180,7 @@
         [button setBackgroundColor:RGB(242, 242, 242)];
     }
     [btn setBackgroundColor:KWhiteColor];
-    _endData = [DataString getYesterdayData];
+    _endData = [DataString getNowData];
     if (btn.tag==200) {
         _beginData = [DataString getWeekBeforeData];
         
@@ -219,7 +219,7 @@
 #pragma mark ---日历Delegate---
 - (void)dateViewPickerView:(LXDateViewPickerView *)view didSelectedDate:(NSDate *)date AndisStartLB:(BOOL)isStart{
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    formatter.dateFormat = @"YYYYMMdd";
+    formatter.dateFormat = @"YYYY-MM-dd";
     NSString *dateStr = [formatter stringFromDate:date];
     if (isStart) {
         _beginData = dateStr;

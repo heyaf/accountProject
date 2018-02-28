@@ -35,4 +35,26 @@
     [unarchiver finishDecoding];
     return usermodel;
 }
+//查看报警信息
+- (void)checkWarningMessages{
+    
+    SingleUser *usermodel = [self getusermodel];
+    NSDictionary *pareDic = @{@"account":usermodel.account};
+    [[HttpRequest sharedInstance] postWithURLString:SearchWarningMagUrl parameters:pareDic success:^(id responseObject) {
+        
+        NSDictionary *Dic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil];
+        if ([Dic[@"success"] boolValue]) {
+            NSString *numStr = Dic[@"number"];
+            if ([numStr integerValue]>0) {
+                DWTabBarController *tabbarVC = (DWTabBarController *)[[UIApplication sharedApplication] keyWindow].rootViewController;
+                [tabbarVC.tabBar.items[1] showBadge];
+            }
+        }
+        
+    } failure:^(NSError *error) {
+        
+    }];
+    
+    
+}
 @end

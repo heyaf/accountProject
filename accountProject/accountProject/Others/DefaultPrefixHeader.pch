@@ -71,4 +71,4 @@
 #define kHeaderImageKey @"HEADERINAGEKEY"
 
 //存储用户信息的key
-#define kUserinfoKey @"USERINFOMODELKEY1"
+#define kUserinfoKey @"USERINFOMODELKEY12"

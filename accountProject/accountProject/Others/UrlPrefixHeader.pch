@@ -22,8 +22,18 @@
 #define GasUrl [NSString stringWithFormat:IPUrl,@"api/fuelUse.do?getFuelUse"]
 //部门列表
 #define GroupListUrl [NSString stringWithFormat:IPUrl,@"api/assistant.do?getOrgList"]
+//能源概况和班组数据
+#define GroupElectUrl [NSString stringWithFormat:IPUrl,@"api/energyConsumption.do?getEnergyConsumptionData"]
+
+
 
 //报警信息
 #define WarningListUrl [NSString stringWithFormat:IPUrl,@"api/sms.do?getMessageListPage"]
+//修改报警信息状态
+#define ChangeWarningMagUrl [NSString stringWithFormat:IPUrl,@"api/sms.do?changeLookStatus"]
+//查询未读报警信息
+#define SearchWarningMagUrl [NSString stringWithFormat:IPUrl,@"api/sms.do?getUnReadNum"]
 //用户反馈
 #define UserSuggestUrl [NSString stringWithFormat:IPUrl,@"api/assistant.do?userRebackAdd"]
+
+
