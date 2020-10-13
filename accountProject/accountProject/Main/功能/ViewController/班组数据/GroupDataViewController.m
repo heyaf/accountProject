@@ -54,10 +54,15 @@
     [self creatHeader];
     
     [self creatMianUI];
+    
+
 }
 
 #pragma mark ---数据请求---
 - (void)getData{
+    
+    [self drawJHPieChart];
+    return;
     SingleUser *usermodel = [kAppdelegate getusermodel];
     NSDictionary *paraDic = @{@"orgCode":usermodel.orgCode,
                               @"timeScope":_groupNum,
@@ -68,17 +73,16 @@
     [[HttpRequest sharedInstance] postWithURLString:GroupElectUrl parameters:paraDic success:^(id responseObject) {
       NSDictionary *Dic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil];
         if ([Dic[@"success"] boolValue]) {
-            NSLog(@"班组数据%@",Dic);
+            SLog(@"班组数据%@",Dic);
             [_ElectArr removeAllObjects];
             [_NumArr removeAllObjects];
-            NSArray *dataArr = (NSArray *)Dic[@"rows"];
+            NSArray *dataArr = (NSArray *)Dic[@"rows"][0][@"datas"];
             for (int i=0; i<dataArr.count; i++) {
                 
                 [_ElectArr addObject:dataArr[i][@"EnergyKind"]];
                 NSString *numStr = dataArr[i][@"useLevel"];
                 [_NumArr addObject:@([numStr integerValue])];
             }
-            [self drawJHPieChart];
             [SVProgressHUD dismiss];
         }else{
             [SVProgressHUD showErrorWithStatus:Dic[@"msg"]];
@@ -178,11 +182,17 @@
     pie.backgroundColor = [UIColor whiteColor];
     //    pie.center = CGPointMake(CGRectGetMaxX(self.view.frame)/2, CGRectGetMaxY(self.view.frame)/2);
     /* Pie chart value, will automatically according to the percentage of numerical calculation */
-    pie.valueArr = _NumArr;  //@[@18,@14,@25,@40,@70];
+    NSMutableArray *numDataArr = [NSMutableArray arrayWithCapacity:0];
+    for (int i =0; i<5; i++) {
+        int x = 1 + arc4random() % 100;
+        [numDataArr addObject:@(x)];
+    }
+    
+    pie.valueArr =  numDataArr;
     /* The description of each sector must be filled, and the number must be the same as the pie chart. */
-    pie.descArr = _ElectArr; //@[@"第一个元素",@"第二个元素",@"第三个元素",@"第四个元素",@"元素图"];
+    pie.descArr = @[@"水能耗",@"电能耗",@"蒸汽能耗",@"燃气能耗",@"其他能耗"];
     //    pie.backgroundColor = [UIColor whiteColor];
-    pie.didClickType =     JHPieChartDidClickNormalType;
+    pie.didClickType =     JHPieChartDidClickTranslateToBig;
     pie.animationDuration = 0.5;
     [_mainview addSubview:pie];
     /*    When touching a pie chart, the animation offset value     */

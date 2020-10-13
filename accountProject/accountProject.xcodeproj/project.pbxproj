@@ -129,7 +129,7 @@
 		183902EE20231B1600DB7E4B /* DataString.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DataString.m; sourceTree = "<group>"; };
 		184D9D9B202983B000C9FEF9 /* NSDictionary+log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+log.h"; sourceTree = "<group>"; };
 		184D9D9C202983B000C9FEF9 /* NSDictionary+log.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+log.m"; sourceTree = "<group>"; };
-		187ECE0A1FF6167900C449B4 /* accountProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = accountProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		187ECE0A1FF6167900C449B4 /* 多彩能源.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "多彩能源.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		187ECE141FF6167900C449B4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		187ECE161FF6167900C449B4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		187ECE191FF6167900C449B4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -357,7 +357,7 @@
 		187ECE0B1FF6167900C449B4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				187ECE0A1FF6167900C449B4 /* accountProject.app */,
+				187ECE0A1FF6167900C449B4 /* 多彩能源.app */,
 				187ECE221FF6167A00C449B4 /* accountProjectTests.xctest */,
 				187ECE2D1FF6167A00C449B4 /* accountProjectUITests.xctest */,
 			);
@@ -813,7 +813,7 @@
 			);
 			name = accountProject;
 			productName = accountProject;
-			productReference = 187ECE0A1FF6167900C449B4 /* accountProject.app */;
+			productReference = 187ECE0A1FF6167900C449B4 /* 多彩能源.app */;
 			productType = "com.apple.product-type.application";
 		};
 		187ECE211FF6167A00C449B4 /* accountProjectTests */ = {
@@ -1317,8 +1317,9 @@
 				GCC_PREFIX_HEADER = "$(SRCROOT)/accountProject/Others/PrefixHeader.pch";
 				INFOPLIST_FILE = accountProject/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = www.heyafei.com.accountProject;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				MARKETING_VERSION = 1.0.3;
+				PRODUCT_BUNDLE_IDENTIFIER = www.heyafei.com.accountProject1;
+				PRODUCT_NAME = "多彩能源";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1333,8 +1334,9 @@
 				GCC_PREFIX_HEADER = "$(SRCROOT)/accountProject/Others/PrefixHeader.pch";
 				INFOPLIST_FILE = accountProject/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = www.heyafei.com.accountProject;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				MARKETING_VERSION = 1.0.3;
+				PRODUCT_BUNDLE_IDENTIFIER = www.heyafei.com.accountProject1;
+				PRODUCT_NAME = "多彩能源";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

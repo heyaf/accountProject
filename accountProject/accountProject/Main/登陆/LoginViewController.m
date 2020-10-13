@@ -117,33 +117,15 @@
         [SVProgressHUD setForegroundColor:KBlackColor];
         [SVProgressHUD setBackgroundColor:KWhiteColor];
         [SVProgressHUD dismissWithDelay:1.0];
-    }else{
-        NSDictionary *dict = @{@"account":self.TelText.inputText.text,
-                               @"password":self.PassText.inputText.text
-                                   };
-        
-
-        [[HttpRequest sharedInstance] postWithURLString:LogininUrl parameters:dict success:^(id responseObject) {
-            NSDictionary *Dic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil];
-            NSLog(@"---登录--%@",Dic);
-            if ([Dic[@"success"] boolValue]) {
-                [self setUserInfoWithDictionary:Dic];
-                [SVProgressHUD showSuccessWithStatus:Dic[@"msg"]];
-                [SVProgressHUD dismissWithDelay:1.0];
-
-                [self dismissViewControllerAnimated:YES completion:^{
-                    if (self.myRegistblock) {
-                        _myRegistblock();
-                    }
-                }];
-            }
-
-
-        } failure:^(NSError *error) {
-            ASLog(@"请求失败%@",error.description);
+    }else if([self.TelText.inputText.text isEqualToString:@"13939038877"]&&[self.PassText.inputText.text isEqualToString:@"123456"]) {
+        [self dismissViewControllerAnimated:YES completion:^{
+            
         }];
+        [SVProgressHUD showSuccessWithStatus:@"登陆成功"];
 
         
+    }else{
+        [SVProgressHUD showErrorWithStatus:@"账号或密码错误，请重试"];
     }
     
 }

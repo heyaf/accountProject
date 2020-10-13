@@ -29,15 +29,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSInteger i=4;
-    NSLog(@"----%ld",(long)(i+=6));
-    NSLog(@"---%ld",(long)(i+=12));
-    
+
     self.navigationController.navigationBar.barTintColor = RGB(44, 50, 59);
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
     self.navigationController.navigationBar.tintColor = KWhiteColor;
 
-    self.view.backgroundColor = RGB(245, 245, 249);
+    self.view.backgroundColor = RGB(253, 253, 253);
     _headerArray = [NSMutableArray arrayWithCapacity:0];
     _footArray = [NSMutableArray arrayWithCapacity:0];
     [self creatData];
@@ -50,11 +47,12 @@
 - (void)viewWillAppear:(BOOL)animated{
     self.navigationController.navigationBarHidden = YES;
     self.tabBarController.tabBar.hidden = NO;
-    [kAppdelegate checkWarningMessages];
+    
     
     SingleUser *user = [kAppdelegate getusermodel];
     if (_myUsermodel.account.length>0&&![_myUsermodel.account isEqualToString:user.account]) {
         [self getHeaderHotData];
+        [kAppdelegate checkWarningMessages];
     }
 }
 - (void)viewWillDisappear:(BOOL)animated{
@@ -65,13 +63,8 @@
 - (void)showLoginVC{
     SingleUser *user = [kAppdelegate getusermodel];
     if (user.userId.length==0) {
-        LoginViewController *loginVC = [[LoginViewController alloc] init];
-        [self presentViewController:loginVC animated:YES completion:^{
-            
-        }];
-        loginVC.myRegistblock = ^{
-            [self refreshData];
-        };
+
+
     }else{
         [self getHeaderHotData];
         
@@ -185,7 +178,6 @@
 
 #pragma mark  顶部刷新
 -(void)headerRefresh{
-    NSLog(@"....顶部刷新");
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.tableview headerSetState:CoreHeaderViewRefreshStateRefreshingFailed];
     });
@@ -195,21 +187,20 @@
 
 #pragma mark  底部刷新
 -(void)foorterRefresh{
-    NSLog(@"底部刷新。。。");
     
 }
 #pragma mark ---获取首页头部数据---
 - (void)getHeaderHotData{
     
     SingleUser *user = [kAppdelegate getusermodel];
-    NSLog(@"---%@",user);
+    ASLog(@"---%@",user);
     NSDictionary *parmaryDic = @{@"orgCode":user.orgCode,
                                  @"beginDate":[DataString getYesterdayData],
                                  @"endDate":@"",
                                  @"groupLevel":@"0"
                                  
                                  };
-    NSLog(@"---%@",parmaryDic);
+    ASLog(@"---%@",parmaryDic);
 
     [SVProgressHUD show];
     [SVProgressHUD setForegroundColor:KBlackColor];
@@ -223,19 +214,19 @@
         [self.tableview reloadData];
         [SVProgressHUD dismiss];
     } failure:^(NSError *error) {
-        NSLog(@"错误-----%@-----",error.description);
+        ASLog(@"错误-----%@-----",error.description);
     }];
 }
 #pragma mark ---Getter---
 - (UITableView *)tableview{
     
     if (!_tableview) {
-        _tableview = [[UITableView alloc] initWithFrame:CGRectMake(0, HYFStatusBarHeight, kScreenWidth, kScreenHeight-HYFStatusBarHeight-HYFTabBarAndBottomHeight)];
+        _tableview = [[UITableView alloc] initWithFrame:CGRectMake(0, HYFStatusBarHeight, kScreenWidth, 44*6+20)];
         _tableview.delegate = self;
         _tableview.dataSource = self;
         _tableview.backgroundColor = RGB(245, 245, 245);
 //        [self refreshWidgetPrepare];
-        
+        _tableview.tableFooterView = [UIView new];
         [self.view addSubview:_tableview];
     }
     return _tableview;
@@ -283,14 +274,14 @@
     
     UILabel *dateLB1 = [[UILabel alloc] initWithFrame:CGRectMake(0, 30, frame.size.width, frame.size.height-30-40)];
     [view addSubview:dateLB1];
-    NSString *title;
-    if ([headermodel.EnergyKind isEqualToString:@"electric"]) {
-        title = @"电耗能";
-    }else if ([headermodel.EnergyKind isEqualToString:@"fuel"]){
-        title = @"天然气耗能";
-    }else if ([headermodel.EnergyKind isEqualToString:@"water"]){
-        title = @"水耗能";
-    }
+    NSString *title = headermodel.EnergyKind;
+//    if ([headermodel.EnergyKind isEqualToString:@"electric"]) {
+//        title = @"电耗能";
+//    }else if ([headermodel.EnergyKind isEqualToString:@"fuel"]){
+//        title = @"天然气耗能";
+//    }else if ([headermodel.EnergyKind isEqualToString:@"water"]){
+//        title = @"水耗能";
+//    }
     dateLB1.text = title;
     dateLB1.textAlignment = NSTextAlignmentCenter;
     dateLB1.font = [UIFont fontWithName:@"Helvetica-Bold" size:20.0f];
@@ -348,7 +339,7 @@
     }else if (indexPath.row ==2){
         WaterEnergyViewController *energyVC = [[WaterEnergyViewController alloc] init];
         energyVC.navigationItem.title = @"蒸汽耗能";
-        energyVC.url = SteamUrl;
+//        energyVC.url = SteamUrl;
         [self.navigationController pushViewController:energyVC animated:YES];
     }else if (indexPath.row ==3){
         WaterEnergyViewController *energyVC = [[WaterEnergyViewController alloc] init];

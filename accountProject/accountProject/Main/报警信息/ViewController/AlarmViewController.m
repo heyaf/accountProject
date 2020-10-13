@@ -56,6 +56,13 @@
     
 }
 - (void)creatDataLoadMore:(BOOL) isLoadMore{
+    if (!_tableview) {
+        [self tableview];
+    }else{
+        [self.tableview reloadData];
+    [self.tableview footerSetState:CoreFooterViewRefreshStateSuccessedResultDataShowing];
+    }
+    return;
     SingleUser *usermodel = [kAppdelegate getusermodel];
     NSDictionary *paraDic = @{@"account":usermodel.account,
                               @"selectDate":@"2016",
@@ -76,12 +83,7 @@
             [_dataArr addObjectsFromArray:arr];
             NSLog(@"-----%@",_dataArr);
 
-            if (!_tableview) {
-                [self tableview];
-            }else{
-                [self.tableview reloadData];
-            [self.tableview footerSetState:CoreFooterViewRefreshStateSuccessedResultDataShowing];
-            }
+
             
 
         }else{
@@ -155,7 +157,7 @@
     return 100;
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return _dataArr.count;
+    return 5;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -179,12 +181,12 @@
     cell.BGView.layer.borderWidth = 1;
     cell.BGView.layer.borderColor = RGB(235, 235, 235).CGColor;
     
-    AlarmModel *model = _dataArr[indexPath.section];
-    cell.nameLB.text = model.title;
-    cell.dateLB.text = model.sendTime;
-    cell.titleLB.text = model.content;
+    NSArray *dataArray = @[@"水能源",@"蒸汽能源",@"水能源",@"电能源",@"水能源"];
+    cell.nameLB.text = [NSString stringWithFormat:@"%@发生警报",dataArray[indexPath.section]];
+    cell.dateLB.text = @"2020-10-18";
+    cell.titleLB.text = @"请立即赶往相应地点排查，必要时上报系统";
 //    cell.numLB.text = model.numStr;
-    if ([model.lookStatus isEqualToString:@"0"]) {
+    if (indexPath.section==1||indexPath.section==3) {
         [cell.dateLB showBadge];
     }
     

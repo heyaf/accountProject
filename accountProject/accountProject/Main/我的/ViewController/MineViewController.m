@@ -74,6 +74,11 @@
     [self creatData];
     [self creatUI];
     
+    LoginViewController *loginVC = [[LoginViewController alloc] init];
+    [self presentViewController:loginVC animated:YES completion:^{
+        
+    }];
+    
 }
 -(void)viewWillAppear:(BOOL)animated{
     
@@ -211,9 +216,7 @@
         
     }];
     loginVC.myRegistblock = ^{
-        SingleUser *user = [kAppdelegate getusermodel];
-        NSLog(@",,,%@",user.realName);
-        [_loginBTN setTitle:user.realName forState:UIControlStateNormal];
+        
     };
 }
 - (void)setUserInfoWithDictionary:(NSDictionary *)dic{

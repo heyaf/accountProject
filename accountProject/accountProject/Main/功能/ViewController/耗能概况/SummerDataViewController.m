@@ -52,19 +52,24 @@
 }
 #pragma mark ---数据请求---
 - (void)getData{
+    
+    [self drawJHPieChart];
+    return;
     SingleUser *usermodel = [kAppdelegate getusermodel];
     NSDictionary *paraDic = @{@"orgCode":usermodel.orgCode,
-                              @"timeScope":@"",
+//                              @"timeScope":@"",
                               @"beginDate":_beginDate,
                               @"endDate":_endDate
                               };
+    NSLog(@"能耗参数%@",paraDic);
     [SVProgressHUD show];
     [[HttpRequest sharedInstance] postWithURLString:GroupElectUrl parameters:paraDic success:^(id responseObject) {
         NSDictionary *Dic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil];
         if ([Dic[@"success"] boolValue]) {
-            ASLog(@"能耗概况：%@",Dic);
-            [_ElectArr removeAllObjects];
+//            SLog(@"能耗概况：%@",Dic);
             [_NumArr removeAllObjects];
+            [_TableTitleArr removeAllObjects];
+            [_TableTitleArr addObject:@"班组"];
             NSMutableArray *Arr1 = [NSMutableArray arrayWithCapacity:0];
             NSMutableArray *Arr2 = [NSMutableArray arrayWithCapacity:0];
             NSMutableArray *Arr3 = [NSMutableArray arrayWithCapacity:0];
@@ -83,38 +88,39 @@
                     NSArray *DetailArr = dataArr[i][@"datas"];
                     [Arr3 addObjectsFromArray:DetailArr];
                 }
-                NSMutableArray *oneArr = [NSMutableArray arrayWithObject:@"一组"];
-                NSMutableArray *twoArr = [NSMutableArray arrayWithObject:@"二组"];
-                NSMutableArray *thrArr = [NSMutableArray arrayWithObject:@"三组"];
-
-                //各组数组的总和
-                NSInteger oneGroup = 0;
-                NSInteger twoGroup = 0;
-                NSInteger thrGroup = 0;
-                for (NSDictionary *DetailDic in Arr1) {
-                    [_TableTitleArr addObject:DetailDic[@"EnergyKind"]];
-                    [oneArr addObject:DetailDic[@"useLevel"]];
-                    NSString *numStr = DetailDic[@"useLevel"];
-                    oneGroup += [numStr integerValue];
-                }
-                for (NSDictionary *DetailDic in Arr2) {
-                    
-                    [twoArr addObject:DetailDic[@"useLevel"]];
-                    NSString *numStr = DetailDic[@"useLevel"];
-                    twoGroup += [numStr integerValue];
-                }
-                for (NSDictionary *DetailDic in Arr3) {
-                    
-                    [thrArr addObject:DetailDic[@"useLevel"]];
-                    NSString *numStr = DetailDic[@"useLevel"];
-                    thrGroup += [numStr integerValue];
-                }
-                _TableNumArr = [NSMutableArray arrayWithObjects:oneArr,twoArr,thrArr,nil];
-                
-                _NumArr = [NSMutableArray arrayWithObjects:@(oneGroup),@(twoGroup),@(thrGroup),nil];
                 
             }
-            [self drawJHPieChart];
+            NSMutableArray *oneArr = [NSMutableArray arrayWithObject:@"一组"];
+            NSMutableArray *twoArr = [NSMutableArray arrayWithObject:@"二组"];
+            NSMutableArray *thrArr = [NSMutableArray arrayWithObject:@"三组"];
+            
+            //计算各组数组的总和
+            NSInteger oneGroup = 0;
+            NSInteger twoGroup = 0;
+            NSInteger thrGroup = 0;
+            for (NSDictionary *DetailDic in Arr1) {
+                [_TableTitleArr addObject:DetailDic[@"EnergyKind"]];
+                [oneArr addObject:DetailDic[@"useLevel"]];
+                NSString *numStr = DetailDic[@"useLevel"];
+                oneGroup += [numStr integerValue];
+            }
+            for (NSDictionary *DetailDic in Arr2) {
+                
+                [twoArr addObject:DetailDic[@"useLevel"]];
+                NSString *numStr = DetailDic[@"useLevel"];
+                twoGroup += [numStr integerValue];
+            }
+            for (NSDictionary *DetailDic in Arr3) {
+                
+                [thrArr addObject:DetailDic[@"useLevel"]];
+                NSString *numStr = DetailDic[@"useLevel"];
+                thrGroup += [numStr integerValue];
+            }
+            _TableNumArr = [NSMutableArray arrayWithObjects:oneArr,twoArr,thrArr,nil];
+            
+            _NumArr = [NSMutableArray arrayWithObjects:@(oneGroup),@(twoGroup),@(thrGroup),nil];
+//            SLog(@"表格列数%lu",(unsigned long)_TableTitleArr.count);
+//            SLog(@"%@,%@,%@",_TableTitleArr,_TableNumArr,_NumArr);
             [SVProgressHUD dismiss];
         }else{
             [SVProgressHUD showErrorWithStatus:Dic[@"msg"]];
@@ -153,12 +159,6 @@
     [view addSubview:titleLB];
     
     
-    
-    
-    
-    
-  
-    
     NSArray *array = @[@"七日",@"一个月",@"三个月"];
     _buttonArr1 = [NSMutableArray array];
     for (int i=0 ; i<3; i++) {
@@ -185,13 +185,22 @@
         [_pieChart removeFromSuperview];
         [_tableChart removeFromSuperview];
     }
-    JHPieChart *pie = [[JHPieChart alloc] initWithFrame:CGRectMake(10, 50, kScreenWidth-20, 270)];
+    JHPieChart *pie = [[JHPieChart alloc] initWithFrame:CGRectMake(10, 200, kScreenWidth-20, 270)];
     pie.backgroundColor = [UIColor whiteColor];
     //    pie.center = CGPointMake(CGRectGetMaxX(self.view.frame)/2, CGRectGetMaxY(self.view.frame)/2);
     /* Pie chart value, will automatically according to the percentage of numerical calculation */
-    pie.valueArr = _NumArr;  //@[@18,@14,@25,@40,@70];
+    NSMutableArray *numDataArr = [NSMutableArray arrayWithCapacity:0];
+    for (int i =0; i<5; i++) {
+        int x = 1 + arc4random() % 100;
+        [numDataArr addObject:@(x)];
+    }
+    
+    pie.valueArr =  numDataArr;
+//    pie.valueArr = @[@18,@14,@25];
+
     /* The description of each sector must be filled, and the number must be the same as the pie chart. */
-    pie.descArr = _ElectArr; //@[@"第一个元素",@"第二个元素",@"第三个元素",@"第四个元素",@"元素图"];
+    pie.descArr = @[@"第一个元素",@"第二个元素",@"第三个元素",@"第四个元素",@"元素图"];
+//    ASLog(@"......%@,%@",_NumArr,_ElectArr);
     //    pie.backgroundColor = [UIColor whiteColor];
     pie.didClickType =     JHPieChartDidClickNormalType;
     pie.animationDuration = 0.5;
@@ -200,12 +209,12 @@
     pie.positionChangeLengthWhenClick = 15;
     pie.showDescripotion = YES;
     pie.animationType = JHPieChartAnimationByOrder;
-    //    pie.colorArr = @[[UIColor redColor],[UIColor redColor],[UIColor redColor],[UIColor redColor],[UIColor redColor],[UIColor redColor],[UIColor redColor],[UIColor yellowColor]];
+    pie.colorArr = @[[UIColor redColor],[UIColor redColor],[UIColor redColor],[UIColor redColor],[UIColor redColor],[UIColor redColor],[UIColor redColor],[UIColor yellowColor]];
     /*        Start animation         */
     [pie showAnimation];
     _pieChart = pie;
     
-    JHTableChart *table = [[JHTableChart alloc] initWithFrame:CGRectMake(10, 40, kScreenWidth-20, 200)];
+    JHTableChart *table = [[JHTableChart alloc] initWithFrame:CGRectMake(10, 40, kScreenWidth-20, 150)];
     /*       Table name         */
     /*        Each column of the statement, one of the first to show if the rows and columns that can use the vertical segmentation of rows and columns         */
     //    table.colTitleArr = @[@"属性|配置",@"外观",@"内饰",@"数量",@"",@"",@"",@"",@"",@""];
@@ -265,12 +274,14 @@
 #pragma mark ---日历Delegate---
 - (void)dateViewPickerView:(LXDateViewPickerView *)view didSelectedDate:(NSDate *)date AndisStartLB:(BOOL)isStart{
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    formatter.dateFormat = @"YYYYMMdd";
+    formatter.dateFormat = @"YYYY-MM-dd";
     NSString *dateStr = [formatter stringFromDate:date];
     if (isStart) {
-        NSLog(@"开始-----%@",dateStr);
+        _beginDate = dateStr;
     }else{
-        NSLog(@"结束-----%@",dateStr);
+        _endDate = dateStr;
+        [self getData];
+        
     }
     
 }

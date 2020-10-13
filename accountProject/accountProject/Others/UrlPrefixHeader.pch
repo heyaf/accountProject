@@ -17,13 +17,13 @@
 //电能耗
 #define ElectricUrl [NSString stringWithFormat:IPUrl,@"api/electricityUse.do?getElectricityUse"]
 //蒸汽能耗（待添加，暂时没有）
-#define SteamUrl [NSString stringWithFormat:IPUrl,@"api/energyConsumption.do?getEnergyConsumptionData"]
+#define SteamUrl [NSString stringWithFormat:IPUrl,@"api/energyConsumption.do?"]
 //燃气能耗
 #define GasUrl [NSString stringWithFormat:IPUrl,@"api/fuelUse.do?getFuelUse"]
 //部门列表
 #define GroupListUrl [NSString stringWithFormat:IPUrl,@"api/assistant.do?getOrgList"]
 //能源概况和班组数据
-#define GroupElectUrl [NSString stringWithFormat:IPUrl,@"api/energyConsumption.do?getEnergyConsumptionData"]
+#define GroupElectUrl [NSString stringWithFormat:IPUrl,@"api/energyConsumption.do?getEnergyConsumptionDataTimeScope"]
 
 
 

@@ -37,7 +37,7 @@
 }
 //查看报警信息
 - (void)checkWarningMessages{
-    
+    return;
     SingleUser *usermodel = [self getusermodel];
     NSDictionary *pareDic = @{@"account":usermodel.account};
     [[HttpRequest sharedInstance] postWithURLString:SearchWarningMagUrl parameters:pareDic success:^(id responseObject) {

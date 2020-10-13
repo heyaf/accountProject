@@ -30,24 +30,30 @@
     self.view.backgroundColor =RGB(242, 242, 242);
     self.navigationController.navigationBar.barTintColor = RGB(44, 50, 59);
     
-    _groupArr = [NSMutableArray arrayWithCapacity:0];
-    _groupTitleArr = [NSMutableArray arrayWithCapacity:0];
-    _beginData = [DataString getBeforeData:7];
-    _endData = [DataString getNowData];
-    
-    [self getGroupList];
-//    NSArray *array = @[
-//                       @[@15],//第一组元素 如果有多个元素，往该组添加，每一组只有一个元素，表示是单列柱状图| | | | |
-//                       @[@50],//第二组元素
-//                       @[@10],//第三组元素
-//                       @[@40],
-//                       @[@19],
-//                       @[@12],
-//                       @[@15],
-//                       ];
-//    NSArray *array1 = @[@"12-01",@"12-02",@"12-03",@"12-04",@"12-05",@"12-06",@"12-07"];
-//    [self showColumnViewWithArray:array WithArray:array1];
-    [self creatChooseBtn];
+    if (self.url.length==0) {
+        IBConfigration *configration = [[IBConfigration alloc] init];
+        configration.title = @"提示";
+        configration.message = @"暂无数据";
+        
+        configration.confirmTitle=@"确定";
+        
+        configration.messageAlignment = NSTextAlignmentCenter;
+        
+        IBAlertView *alerView = [IBAlertView alertWithConfigration:configration block:^(NSUInteger index) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }];
+        [alerView show];
+    }else{
+        _groupArr = [NSMutableArray arrayWithCapacity:0];
+        _groupTitleArr = [NSMutableArray arrayWithCapacity:0];
+        _beginData = [DataString getBeforeData:7];
+        _endData = [DataString getNowData];
+        
+        [self getGroupList];
+        
+        [self creatChooseBtn];
+
+    }
 }
 - (void)viewWillAppear:(BOOL)animated{
     self.navigationController.navigationBarHidden = NO;
@@ -59,6 +65,9 @@
 }
 #pragma mark ---部门列表---
 - (void)getGroupList{
+    [_groupArr addObjectsFromArray:@[@"第一机组",@"第二机组",@"第三机组"]];
+     [self getMainDataWithOrgCode:nil meterCode:nil];
+    return;
     SingleUser *user = [kAppdelegate getusermodel];
     NSDictionary *dict = @{@"orgCode":user.orgCode};
     [[HttpRequest sharedInstance] postWithURLString:GroupListUrl parameters:dict success:^(id responseObject) {
@@ -70,9 +79,7 @@
             for (NSDictionary *dic in _groupArr) {
                 [_groupTitleArr addObject:dic[@"orgName"]];
             }
-            
-            [self getMainDataWithOrgCode:_groupArr[0][@"orgCode"] meterCode:nil];
-            
+           
         }else{
             [SVProgressHUD showErrorWithStatus:Dic[@"msg"]];
             [self.navigationController popViewControllerAnimated:YES];
@@ -84,9 +91,9 @@
 }
 #pragma  mark ---请求条形数据---
 - (void)getMainDataWithOrgCode:(NSString *)orgcode meterCode:(NSString *)meterCode {
-   
+   [self showColumnViewWithArray:@[] WithArray:@[]];
+    return;
     NSDictionary *parameterDic = @{@"orgCode":orgcode,
-                                   
                                    @"beginDate":_beginData,
                                    @"endDate":_endData
                                    };
@@ -101,14 +108,13 @@
                 NSMutableArray *nameArr = [NSMutableArray arrayWithCapacity:0];
                 NSMutableArray *numArr = [NSMutableArray arrayWithCapacity:0];
                 for (NSDictionary *Msgdic in Dic[@"rows"]) {
-                    [nameArr addObject:Msgdic[@"orgName"]];
+                    [nameArr addObject:[Msgdic[@"useDate"] substringFromIndex:5]];
                     NSString *numberStr = Msgdic[@"useLevel"];
                     
                     [numArr addObject:@[@([numberStr integerValue])]];
                 }
-                NSLog(@"----%@",numArr);
+                
                 [SVProgressHUD dismiss];
-                [self showColumnViewWithArray:numArr WithArray:nameArr];
             }else{
                 [SVProgressHUD showErrorWithStatus:Dic[@"msg"]];
             }
@@ -120,7 +126,8 @@
         }
         
     } failure:^(NSError *error) {
-        
+        [SVProgressHUD showErrorWithStatus:@"数据错误"];
+        [SVProgressHUD dismissWithDelay:0.5];
     }];
     
 }
@@ -190,17 +197,21 @@
     }else if (btn.tag ==202){
         _beginData = [DataString getThreeMonthBeforeData];
     }
-    [self getMainDataWithOrgCode:[self GetOrgCodeWithText:_titleLB.text] meterCode:nil];
+    [self getMainDataWithOrgCode:nil meterCode:nil];
 }
 
 - (void)chooseData{
     
-    THScrollChooseView *scrollChooseView = [[THScrollChooseView alloc] initWithQuestionArray:_groupTitleArr withDefaultDesc:@"选项"];
+    NSArray *titleGroupArr =@[@"第一生产线",@"第二生产线",@"第三生产线"];
+    THScrollChooseView *scrollChooseView = [[THScrollChooseView alloc] initWithQuestionArray:titleGroupArr withDefaultDesc:@"选项"];
     [scrollChooseView showView];
     scrollChooseView.confirmBlock = ^(NSInteger selectedQuestion) {
-        
-        _titleLB.text = _groupTitleArr[selectedQuestion];
-        [self getMainDataWithOrgCode:[self GetOrgCodeWithText:_titleLB.text] meterCode:nil];
+        ASLog(@"---%li",selectedQuestion);
+        if (selectedQuestion==3) {
+            selectedQuestion=0;
+        }
+        _titleLB.text = titleGroupArr[selectedQuestion];
+        [self getMainDataWithOrgCode:nil meterCode:nil];
     };
 }
 #pragma mark ---根据字段获得orgcode---
@@ -218,17 +229,17 @@
 
 #pragma mark ---日历Delegate---
 - (void)dateViewPickerView:(LXDateViewPickerView *)view didSelectedDate:(NSDate *)date AndisStartLB:(BOOL)isStart{
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    formatter.dateFormat = @"YYYY-MM-dd";
-    NSString *dateStr = [formatter stringFromDate:date];
-    if (isStart) {
-        _beginData = dateStr;
-    }else{
-        _endData = dateStr;
-        
-        [self getMainDataWithOrgCode:[self GetOrgCodeWithText:_titleLB.text] meterCode:nil];
-
-    }
+//    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+//    formatter.dateFormat = @"YYYY-MM-dd";
+//    NSString *dateStr = [formatter stringFromDate:date];
+//    if (isStart) {
+//        _beginData = dateStr;
+//    }else{
+//        _endData = dateStr;
+//
+        [self getMainDataWithOrgCode:nil meterCode:nil];
+//
+//    }
     
 }
 
@@ -244,7 +255,20 @@
     JHColumnChart *column = [[JHColumnChart alloc] initWithFrame:CGRectMake(0, HYFNavAndStatusHeight+150, kScreenWidth, 320)];
     _column = column;
     /*        Create an array of data sources, each array is a module data. For example, the first array can represent the average score of a class of different subjects, the next array represents the average score of different subjects in another class        */
-    column.valueArr = numberArr;
+    NSMutableArray *numDataArr = [NSMutableArray arrayWithCapacity:0];
+    for (int i =0; i<5; i++) {
+        NSMutableArray *numDataArr1 = [NSMutableArray arrayWithCapacity:0];
+
+        for (int i =0; i<2; i++) {
+            int x = 1 + arc4random() % 100;
+            [numDataArr1 addObject:@(x)];
+
+        }
+        [numDataArr addObject:numDataArr1];
+
+    }
+    
+    column.valueArr = numDataArr;
     /*       This point represents the distance from the lower left corner of the origin.         */
     column.originSize = CGPointMake(20, 20);
     /*    The first column of the distance from the starting point     */
@@ -264,7 +288,7 @@
     /*    Each module of the color array, such as the A class of the language performance of the color is red, the color of the math achievement is green     */
         column.columnBGcolorsArr = @[@[KSelectColor,[UIColor greenColor]],@[[UIColor redColor],[UIColor greenColor]],@[[UIColor redColor],[UIColor greenColor]]];//如果为复合型柱状图 即每个柱状图分段 需要传入如上颜色数组 达到同时指定复合型柱状图分段颜色的效果
     /*        Module prompt         */
-    column.xShowInfoText = valueArr;
+    column.xShowInfoText = @[@"项目一",@"项目二",@"项目三"];
   
     
     column.delegate = self;
