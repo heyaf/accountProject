@@ -138,16 +138,16 @@
 }
 #pragma mark ---头部视图---
 - (void)creatHeader{
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, HYFNavAndStatusHeight, kScreenWidth, 60)];
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, HYFNavAndStatusHeight, kScreenWidth, 80)];
     headerView.backgroundColor = KWhiteColor;
     [self.view addSubview:headerView];
-    LXDateViewPickerView *pickerView = [[LXDateViewPickerView alloc] initWithFrame:CGRectMake(20, 10.f, kScreenWidth-40, 40.f)];
+    LXDateViewPickerView *pickerView = [[LXDateViewPickerView alloc] initWithFrame:CGRectMake(20, 10.f+20, kScreenWidth-40, 40.f)];
     pickerView.delegate = self;
     [headerView addSubview:pickerView];
 }
 #pragma mark ---主题UI---
 - (void) creatMianUI{
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, HYFNavAndStatusHeight+70, 500, 470)];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, HYFNavAndStatusHeight+90, 500, 470)];
     view.backgroundColor = KWhiteColor;
     [self.view addSubview:view];
     _mainview = view;

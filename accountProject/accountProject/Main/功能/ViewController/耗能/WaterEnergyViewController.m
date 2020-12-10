@@ -9,9 +9,11 @@
 #import "WaterEnergyViewController.h"
 #import "LXDateViewPickerView.h"
 #import "THScrollChooseView.h"
+#import <BUAdSDK/BUNativeExpressInterstitialAd.h>
+#define un_splash_ID @"945641252" //插屏广告位ID
 
 
-@interface WaterEnergyViewController ()<JHColumnChartDelegate,LXDateViewPickerViewDelegate>
+@interface WaterEnergyViewController ()<JHColumnChartDelegate,LXDateViewPickerViewDelegate,BUNativeExpresInterstitialAdDelegate>
 @property (nonatomic,strong) JHColumnChart *column;
 @property (nonatomic,strong) UILabel *titleLB;
 @property (nonatomic,strong) NSMutableArray *buttonArr;
@@ -19,6 +21,7 @@
 @property (nonatomic,strong) NSMutableArray *groupTitleArr;
 @property (nonatomic,strong) NSString *beginData;
 @property (nonatomic,strong) NSString *endData;
+@property (nonatomic, strong) BUNativeExpressInterstitialAd *interstitialAd;
 
 @end
 
@@ -30,20 +33,20 @@
     self.view.backgroundColor =RGB(242, 242, 242);
     self.navigationController.navigationBar.barTintColor = RGB(44, 50, 59);
     
-    if (self.url.length==0) {
-        IBConfigration *configration = [[IBConfigration alloc] init];
-        configration.title = @"提示";
-        configration.message = @"暂无数据";
-        
-        configration.confirmTitle=@"确定";
-        
-        configration.messageAlignment = NSTextAlignmentCenter;
-        
-        IBAlertView *alerView = [IBAlertView alertWithConfigration:configration block:^(NSUInteger index) {
-            [self.navigationController popViewControllerAnimated:YES];
-        }];
-        [alerView show];
-    }else{
+//    if (self.url.length==0) {
+//        IBConfigration *configration = [[IBConfigration alloc] init];
+//        configration.title = @"提示";
+//        configration.message = @"暂无数据";
+//
+//        configration.confirmTitle=@"确定";
+//
+//        configration.messageAlignment = NSTextAlignmentCenter;
+//
+//        IBAlertView *alerView = [IBAlertView alertWithConfigration:configration block:^(NSUInteger index) {
+//            [self.navigationController popViewControllerAnimated:YES];
+//        }];
+//        [alerView show];
+//    }else{
         _groupArr = [NSMutableArray arrayWithCapacity:0];
         _groupTitleArr = [NSMutableArray arrayWithCapacity:0];
         _beginData = [DataString getBeforeData:7];
@@ -52,8 +55,62 @@
         [self getGroupList];
         
         [self creatChooseBtn];
+    
+    [self loadInterstitialWithSlotID:un_splash_ID];
 
+}
+
+- (void)loadInterstitialWithSlotID:(NSString *)slotID {
+//    CGFloat width = CGRectGetWidth([UIScreen mainScreen].bounds)-40;
+//    CGFloat height = width/kScreenWidth*kScreenH;
+// important: 升级的用户请注意，初始化方法去掉了imgSize参数
+    self.interstitialAd = [[BUNativeExpressInterstitialAd alloc] initWithSlotID:slotID adSize:CGSizeMake(300, 300)];
+    self.interstitialAd.delegate = self;
+    [self.interstitialAd loadAdData];
+    [self.interstitialAd showAdFromRootViewController:self];
+}
+- (void)nativeExpresInterstitialAdDidLoad:(BUNativeExpressInterstitialAd *)interstitialAd {
+    ASLog(@"121212121");
+    
+
+}
+
+- (void)nativeExpresInterstitialAd:(BUNativeExpressInterstitialAd *)interstitialAd didFailWithError:(NSError *)error {
+//    self.selectedView.promptStatus = BUDPromptStatusAdLoadedFail;
+    [self pbud_logWithSEL:_cmd msg:[NSString stringWithFormat:@"error:%@", error]];
+}
+
+- (void)nativeExpresInterstitialAdRenderSuccess:(BUNativeExpressInterstitialAd *)interstitialAd {
+//    self.selectedView.promptStatus = BUDPromptStatusAdLoaded;
+    [self pbud_logWithSEL:_cmd msg:@""];
+    if (self.interstitialAd) {
+        ASLog(@"7878787878");
+       [self.interstitialAd showAdFromRootViewController:self];
     }
+}
+
+- (void)nativeExpresInterstitialAdRenderFail:(BUNativeExpressInterstitialAd *)interstitialAd error:(NSError *)error {
+//    self.selectedView.promptStatus = BUDPromptStatusAdLoadedFail;
+    [self pbud_logWithSEL:_cmd msg:[NSString stringWithFormat:@"error:%@", error]];
+}
+- (void)pbud_logWithSEL:(SEL)sel msg:(NSString *)msg {
+    ASLog(@"SDKDemoDelegate BUNativeExpressInterstitialAd In VC (%@) extraMsg:%@", NSStringFromSelector(sel), msg);
+}
+- (void)nativeExpresInterstitialAdWillVisible:(BUNativeExpressInterstitialAd *)interstitialAd {
+    [self pbud_logWithSEL:_cmd msg:@""];
+}
+
+- (void)nativeExpresInterstitialAdDidClick:(BUNativeExpressInterstitialAd *)interstitialAd {
+    [self pbud_logWithSEL:_cmd msg:@""];
+}
+
+- (void)nativeExpresInterstitialAdWillClose:(BUNativeExpressInterstitialAd *)interstitialAd {
+    [self pbud_logWithSEL:_cmd msg:@""];
+}
+
+- (void)nativeExpresInterstitialAdDidClose:(BUNativeExpressInterstitialAd *)interstitialAd {
+    [self pbud_logWithSEL:_cmd msg:@""];
+    self.interstitialAd = nil;
 }
 - (void)viewWillAppear:(BOOL)animated{
     self.navigationController.navigationBarHidden = NO;
@@ -133,7 +190,7 @@
 }
 #pragma  mark ---界面布局----
 - (void)creatChooseBtn{
-    UIView *headerBgview = [[UIView alloc] initWithFrame:CGRectMake(0, HYFNavAndStatusHeight, kScreenWidth, 140)];
+    UIView *headerBgview = [[UIView alloc] initWithFrame:CGRectMake(0, HYFNavAndStatusHeight+20, kScreenWidth, 140)];
     headerBgview.backgroundColor = KWhiteColor;
     [self.view addSubview:headerBgview];
     
@@ -156,7 +213,7 @@
     [button addTarget:self action:@selector(chooseData) forControlEvents:UIControlEventTouchUpInside];
     [chooseView addSubview:button];
    
-    LXDateViewPickerView *pickerView = [[LXDateViewPickerView alloc] initWithFrame:CGRectMake(20, 80.f, kScreenWidth-40, 40.f)];
+    LXDateViewPickerView *pickerView = [[LXDateViewPickerView alloc] initWithFrame:CGRectMake(20, 80.f+20, kScreenWidth-40, 40.f)];
     pickerView.delegate = self;
     [headerBgview addSubview:pickerView];
 
@@ -164,7 +221,7 @@
     _buttonArr  =[NSMutableArray array];
     for (int i=0 ; i<3; i++) {
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.frame = CGRectMake(i*kScreenWidth/3, HYFNavAndStatusHeight+150+320, kScreenWidth/3, 40);
+        button.frame = CGRectMake(i*kScreenWidth/3, HYFNavAndStatusHeight+150+320+20, kScreenWidth/3, 40);
         [self.view addSubview:button];
         [button setTitle:array[i] forState:UIControlStateNormal];
         [button setTitleColor:RGB(100, 100, 100) forState:UIControlStateNormal];
@@ -252,7 +309,7 @@
 //柱状图
 - (void)showColumnViewWithArray:(NSArray *)numberArr WithArray:(NSArray *)valueArr{
     [_column removeFromSuperview];
-    JHColumnChart *column = [[JHColumnChart alloc] initWithFrame:CGRectMake(0, HYFNavAndStatusHeight+150, kScreenWidth, 320)];
+    JHColumnChart *column = [[JHColumnChart alloc] initWithFrame:CGRectMake(0, HYFNavAndStatusHeight+150+20, kScreenWidth, 320)];
     _column = column;
     /*        Create an array of data sources, each array is a module data. For example, the first array can represent the average score of a class of different subjects, the next array represents the average score of different subjects in another class        */
     NSMutableArray *numDataArr = [NSMutableArray arrayWithCapacity:0];

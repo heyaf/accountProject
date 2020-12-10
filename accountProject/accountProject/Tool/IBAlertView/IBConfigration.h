@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 @import UIKit;
 
-#define kScreenWidth CGRectGetWidth([UIScreen mainScreen].bounds)
-#define kScreenHeight CGRectGetHeight([UIScreen mainScreen].bounds)
+#define kScreenW CGRectGetWidth([UIScreen mainScreen].bounds)
+#define kScreenH CGRectGetHeight([UIScreen mainScreen].bounds)
 
 @interface IBConfigration : NSObject
 @property (nonatomic, copy) NSString *title;

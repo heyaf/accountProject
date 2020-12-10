@@ -95,7 +95,7 @@
 }
 #pragma mark ---头部视图---
 - (void)creatHeader{
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, HYFNavAndStatusHeight, kScreenWidth, 60)];
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, HYFNavAndStatusHeight+20, kScreenWidth, 60)];
     headerView.backgroundColor = KWhiteColor;
     [self.view addSubview:headerView];
     NSArray *array = @[@"一班",@"二班",@"三班"];

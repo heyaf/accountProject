@@ -45,7 +45,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated{
-    self.navigationController.navigationBarHidden = YES;
+    self.navigationController.navigationBarHidden = NO;
     self.tabBarController.tabBar.hidden = NO;
     
     
@@ -221,7 +221,7 @@
 - (UITableView *)tableview{
     
     if (!_tableview) {
-        _tableview = [[UITableView alloc] initWithFrame:CGRectMake(0, HYFStatusBarHeight, kScreenWidth, 44*6+20)];
+        _tableview = [[UITableView alloc] initWithFrame:CGRectMake(0, HYFStatusBarHeight, kScreenWidth, kScreenHeight-HYFNavAndStatusHeight)];
         _tableview.delegate = self;
         _tableview.dataSource = self;
         _tableview.backgroundColor = RGB(245, 245, 245);
